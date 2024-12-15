@@ -13,14 +13,11 @@ def log_setup():
     os.makedirs(log_directory, exist_ok = True)
 
     logger = logging.getLogger()
-    logging.getLogger('apscheduler').setLevel(logging.ERROR)
     logger.setLevel(logging.DEBUG)
 
     log_handler = RotatingFileHandler(log_path, maxBytes = 5 * 1024 * 1024, backupCount=5)
-
     log_formatter = logging.Formatter('%(asctime)s - %(levelname)-9s %(message)s', "%m/%d/%Y %H:%M")
     log_handler.setFormatter(log_formatter)
-
     logger.addHandler(log_handler)
 
     console_handler = logging.StreamHandler()
@@ -33,3 +30,10 @@ def log_setup():
         log_handler.doRollover()
 
     logger.info(f"Logging started. Logs located at '{log_path}'.")
+
+    apscheduler_logger = logging.getLogger('apscheduler')
+    apscheduler_logger.setLevel(logging.ERROR)
+    apscheduler_console_handler = logging.StreamHandler()
+    apscheduler_console_handler.setFormatter(log_formatter)
+    apscheduler_logger.addHandler(apscheduler_console_handler)
+    apscheduler_logger.propagate = False

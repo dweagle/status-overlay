@@ -1,7 +1,8 @@
 <div align="center"><h1>STATUS-OVERLAY</h1></div>
 
 <div align="center">Creates YAML files that can be used for Kometa overlays showing airing status on posters.</div>    
-<div align="center">(Upcoming, Returning, Ended, Canceled, New Series, New - Airs MM/DD, Airing, Airs Next MM/DD, and Returns MM/DD)</div>
+<div align="center">(Upcoming, Returning, Ended, Canceled, New Series,</div>
+<div align="center">(New - Airs MM/DD, Airing, Airs Next MM/DD, and Returns MM/DD)</div>
 <div align="center">Inspired from PATTRMM by InsertDisc</div>
 <br>
 <div align="center"> Example Posters </div>

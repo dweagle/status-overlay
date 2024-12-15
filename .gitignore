@@ -1,0 +1,5 @@
+# Ignore workflow files only in the main branch
+main/.github/workflows/build-docker-develop.yml
+
+# Do not ignore workflow files in the develop branch
+!develop/.github/workflows/build-docker-develop.yml

@@ -3,6 +3,7 @@
 <div align="center">Creates YAML files that can be used for Kometa overlays showing airing status on posters.</div>    
 <div align="center">(Upcoming, Returning, Ended, Canceled, New Series, New - Airs MM/DD, Airing, Airs Next MM/DD, and Returns MM/DD)</div>
 <br>
+<div align="center">Inspired by PATTRRM by InsertDisc</div>
 <div align="center"> Example Posters </div>
 
 <div align="center"><img src="readme_docs/example1.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example2.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example3.jpg" alt="Example Posters" width="200" height="300"></div>

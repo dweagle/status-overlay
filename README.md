@@ -40,8 +40,8 @@ Settings for overlay configurations
 # These overlays files will create dates on the poster overlays.
 # Setting the container schedule to run daily will update airing/return dates.
 
-# Mounting this container volumes into your Kometa folder may be the best option.
-#Then Kometa will automatically have access to the files created.
+# Mounting this container's volumes into your Kometa folder may be the best option.
+# Then Kometa will automatically have access to the files created.
 
 # A Returning Soon Collection yaml that can be used with Kometa is also created. 
 # Settings for this are at the very bottom of this settings file.

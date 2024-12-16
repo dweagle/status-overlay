@@ -384,7 +384,7 @@ def validate_settings(main_directory):
             logger.info(f"{indent1}summary: {summary}")
 
         # Validate 'minimum_items'
-        minimum_items = collection_settings.get('minimum_itemes')
+        minimum_items = collection_settings.get('minimum_items')
         if minimum_items is None:
             logger.warning(f"{indent1}minimum_items: 'minimum_items is missing. Defaulting to 1.")
         elif not isinstance(minimum_items, int) or minimum_items <= 0:

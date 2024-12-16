@@ -142,7 +142,7 @@ settings = OrderedDict({
         "summary": DoubleQuotedScalarString("TV Shows returning soon!"),
         "minimum_items": 1,
         "delete_below_minimum": "true",
-        "sort_title": "!010_Returning"
+        "sort_title": DoubleQuotedScalarString("!010_Returning")
     })
 })
 

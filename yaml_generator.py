@@ -67,7 +67,11 @@ DEFAULTS = {
     'poster_source': 'url',
     'poster_path': 'https://raw.githubusercontent.com/meisnate12/Plex-Meta-Manager-Images/master/chart/Returning%20Soon.jpg',
     'visible_home': True,
-    'visible_shared': True
+    'visible_shared': True,
+    "summary": 'TV Shows returning soon!',
+    "minimum_items": '1',
+    "delete_below_minimum": 'true',
+    "sort_title": '!010_Returning'
 }
 
 timezone = os.getenv('TZ', DEFAULTS['timezone'])
@@ -674,10 +678,10 @@ collections:
     visible_home: {get_with_defaults(collection_settings, 'visible_home', 'visible_home')}
     visible_shared: {get_with_defaults(collection_settings, 'visible_shared', 'visible_shared')}
     sync_mode: sync
-    summary: "TV Shows returning soon!"
-    minimum_items: 1
-    delete_below_minimum: true
-    sort_title: "!012_Returning"
+    summary: "{get_with_defaults(collection_settings, 'summary', 'summary')}"
+    minimum_items: {get_with_defaults(collection_settings, 'minimum_items', 'minimum_items')}
+    delete_below_minimum: {get_with_defaults(collection_settings, 'delete_below_minimum', 'delete_below_minimum')}
+    sort_title: "{get_with_defaults(collection_settings, 'sort_title', 'sort_title')}"
     tmdb_discover:
       air_date.gte: {air_date_tomorrow}
       air_date.lte: {thirty_days_past}

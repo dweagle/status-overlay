@@ -372,7 +372,44 @@ def validate_settings(main_directory):
             logger.warning(f"{indent1}visible_shared: Invalid 'visible_shared' value: {visible_shared}. Must be true or false. Defaulting to 'true'.")
         else:
             logger.info(f"{indent1}visible_shared: {visible_shared}")
-            
+
+        # Validate 'summary'
+        summary = collection_settings.get('summary')
+        if summary is None:
+            logger.warning(f"{indent1}summary: 'summary' not provided. Defaulting to 'TV Shows returning soon!.'")
+        else:
+        # Add quotes around the summary if not already present
+            if not (summary.startswith('"') and summary.endswith('"')):
+                summary = f'"{summary}"'
+            logger.info(f"{indent1}summary: {summary}")
+
+        # Validate 'minimum_items'
+        minimum_items = collection_settings.get('minimum_itemes')
+        if minimum_items is None:
+            logger.warning(f"{indent1}minimum_items: 'minimum_items is missing. Defaulting to 1.")
+        elif not isinstance(minimum_items, int) or minimum_items <= 0:
+            logger.warning(f"{indent1}minimum_items: 'minimum_items' invalid value: {minimum_items}. Defaulting to 1.")
+        else:
+            logger.info(f"{indent1}minimum_items: {minimum_items}")
+
+        # Validate 'visible_home'
+        delete_below_minimum = collection_settings.get('delete_below_minimum')
+        if delete_below_minimum is None:
+            logger.warning(f"{indent1}delete_below_minimum: 'delete_below_minimum' is missing or blank.  Defaulting to 'true'.")
+        elif delete_below_minimum not in ['true', 'false']:
+            logger.warning(f"{indent1}delete_below_minimum: Invalid 'delete_below_minimum' value: {delete_below_minimum}. Must be true or false. Defaulting to 'true'.")
+        else:
+            logger.info(f"{indent1}delete_below_minimum: {delete_below_minimum}")
+
+        sort_title = collection_settings.get('sort_title')
+        if sort_title is None:
+            logger.warning(f"{indent1}sort_title: 'sort_title' not provided. Defaulting to '!010_Returning.'")
+        else:
+        # Add quotes around the summary if not already present
+            if not (sort_title.startswith('"') and sort_title.endswith('"')):
+                sort_title= f'"{sort_title}"'
+            logger.info(f"{indent1}sort_title: {sort_title}")
+
         return True # Validation Succes.  Returns to main.py
         
     except Exception as e:

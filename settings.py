@@ -138,7 +138,11 @@ settings = OrderedDict({
         "poster_source": "url",
         "poster_path": None,
         "visible_home": "true",
-        "visible_shared": "true"
+        "visible_shared": "true",
+        "summary": DoubleQuotedScalarString("TV Shows returning soon!"),
+        "minimum_items": 1,
+        "delete_below_minimum": "true",
+        "sort_title": "!010_Returning"
     })
 })
 

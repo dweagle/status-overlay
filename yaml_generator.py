@@ -649,9 +649,11 @@ def create_collection_yaml(config_directory):
 
         # Calculate the date tomorrow
         air_date_tomorrow = (current_date + timedelta(days=1)).strftime('%m/%d/%Y')
-        
+
+        # Calculate dates for Returns Next Section based off days_ahead in settings
+        days_ahead = min(get_with_defaults(overlay_settings, 'days_ahead', 'days_ahead'), 30)  # Ensure it doesn't exceed 30 days
         # Calculate 30 days past the current date
-        thirty_days_past = (current_date + timedelta(days=30)).strftime('%m/%d/%Y')
+        thirty_days_past = (current_date + timedelta(days=days_ahead)).strftime('%m/%d/%Y')
         
         # Get section settings from loaded settings
         libraries = settings.get('libraries', {})

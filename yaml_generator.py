@@ -640,6 +640,13 @@ def create_collection_yaml(config_directory):
     try:
         # Load settings dynamically when needed
         settings = load_settings(config_directory, log_message=False)
+        
+        # Get section settings from loaded settings
+        libraries = settings.get('libraries', {})
+
+        overlay_settings = settings.get('overlay_settings', {})
+
+        collection_settings = settings.get('returning_soon_collection', {})
 
         # Date calculation for the script
         current_date = datetime.now()
@@ -655,13 +662,6 @@ def create_collection_yaml(config_directory):
         # Calculate 30 days past the current date
         thirty_days_past = (current_date + timedelta(days=days_ahead)).strftime('%m/%d/%Y')
         
-        # Get section settings from loaded settings
-        libraries = settings.get('libraries', {})
-
-        overlay_settings = settings.get('overlay_settings', {})
-
-        collection_settings = settings.get('returning_soon_collection', {})
-
         # Get settings for each library and create yamls
         for library_name, library_settings in libraries.items():
             is_anime = get_with_defaults(library_settings, 'is_anime', 'is_anime')

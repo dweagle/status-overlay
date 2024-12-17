@@ -11,72 +11,39 @@
 <div align="center"><img src="readme_docs/example1.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example2.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example3.jpg" alt="Example Posters" width="200" height="300"></div>
 <div align="center"><img src="readme_docs/example4.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example5.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example6.jpg" alt="Example Posters" width="200" height="300"></div>
 
-## Docker Setup
-### Image available on [dockerhub](https://hub.docker.com/r/dweagle/status-overlay)
-Example Docker CLI:
-```
-docker run -d \
-  --name status-overlay \
-  --user 1000:1002 \
-  -e TZ=America/New_York \
-  -e SCHEDULE=06:00 \
-  -e RUN_NOW=false \
-  -v /path/to/status-overlay/config:/config:rw \
-  -v /path/to/kometa/overlays:/path/to/kometa/overlays:rw \
-  --restart unless-stopped \
-  dweagle/status-overlay:latest
-```
-Eample Docker Compose:
-```YAML
-services:
-  status-overlay:
-    image: dweagle/status-overlay:latest
-    container_name: status-overlay
-    user: 1000:1002
-    environment:
-      - TZ=America/New_York  # System time and called for some overlays
-      - SCHEDULE=06:00       # Schedule run time
-      - RUN_NOW:false        # true will bypass the schedule once on container startup
-    volumes:
-      # Mount your local directory to the containers internal config folder.
-      # By default, the logs, settings, and overlays will be created here.
-      - /path/to/status-overlay/config:/config:rw 
-      # If you want overlay files to go to a seperate folder, ex. inside kometa, do
-      # another mount to the save folder you entered in the settings (overlay_save_folder:)
-      # Make sure the path matches the settings file path.
-      - /path/to/kometa/overlays:/path/to/kometa/overlays:rw
-    restart: unless-stopped  
-```
-## Manual Run
-If you are doing testing on your overlay settings and don't want to restart the container
-multiple times or set the env RUN_NOW variable to true, you can connect to the running 
-container and run the following command.  It will run the main.py script and do a complete run.
-```ruby
-python3 main.py -r
-or
-python3 main.py --run-now
-```
+## What does this scripts do?
+If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, status-overlay can create .yml files used by Kometa to create a status overlay on your posters that will show users the airing status of the TV show media in your library.  The default status overlay in Kometa shows returning, ended, and canceled show status. Status-overlay created YAML files can ask Kometa to add airing and returning dates that are updated daily to give users more information. (My significant other loves to know when her shows are on and returning with a quick glance!)  
+
+Status-overlay can also create a 'Returning Soon' collection YAML that will display on Plex's home and library recommendation pages.
+
+## How does the script work?
+Once setup, the script will create a default-settings file in the main config folder (see below) that will allow you to customize the look of your overlays. You can adjust the size, color, font, location, etc. of your overlay to your liking.  You must have knowlege of how Kometa uses these settings or use the default status settings to create overlays just like in the pictures above.
+
+After adjusting your settings file, you will run the script again. It will then create a YAML for each library designated in the settings file. These YAML files can be created in your config folder, directly where you keep your Kometa overlay YAMLs, or other locations you choose.  The script will run on a schedule and adjust the dates in the YAML daily to upsate the overlay dates.
+
+## Getting Started
+See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) for more help.
+
+1. Install status-overlay locally or use the docker image to create a docker container (see below).
+
+2. Start the script/container to have it create your settings file.  Adjust settings to your liking.
+
+3. After adjusting your settings, start the script/container again.  The YAML files will be created at your designated location from the settings file.
+
+4. Adjsut your Kometa config [(using files)](https://kometa.wiki/en/latest/config/files/#location-types-and-paths) to use these YAML files in your overlay settings. Run Kometa to apply.
+
+5. Set your daily schedule for your script/container and enjoy!
 
 ## Default Settings File
+
 ```YAML
-Settings for overlay configurations
-# This containers' scripts will create show status overlay ymls that Kometa
-# can use to create new, airing, ended, canceled and returning overlays.  
-# These overlays files will create dates on the poster overlays.
-# Setting the container schedule to run daily will update airing/return dates.
+# Settings for overlay configurations
+Kometa can use TMDB Dicover api to grab series info to find air dates, etc.  Using the default settings
+in this file limits the "junk" show results that are pulled for a library with mainly US, English language shows.  
+You will get less "No TVDB/TMDB id" errors in Kometa when it parses this info.
 
-# Mounting this container's volumes into your Kometa folder may be the best option.
-# Then Kometa will automatically have access to the files created.
-
-# A Returning Soon Collection yaml that can be used with Kometa is also created. 
-# Settings for this are at the very bottom of this settings file.
-
-# TMDB_Discover settings pull series info to find air dates, etc.  Using the default settings
-# limits the "junk" show results that are pulled for a library with mainly US, English language shows.  
-# You will get less "No TVDB/TMDB id" errors in Kometa.
-
-# If you have an anime library or a TV show library with lots of non English shows, it may be best
-# to NOT use watch_region or with_original_language settings.
+If you have an anime library or a TV show library with lots of non English shows, it may be best
+to NOT use watch_region or with_original_language settings.
 
 libraries:                   # Plex library (SHOWS ONLY) names to create Kometa overlays for.
   TV Shows:                  # Change, add, or remove - Need at least one library.
@@ -187,4 +154,50 @@ returning_soon_collection:
   minimum_items: 1
   delete_below_minimum: 'true'
   sort_title: "!010_Returning"
-```     
+```
+
+## Docker Setup
+### Image available on [dockerhub](https://hub.docker.com/r/dweagle/status-overlay)
+Example Docker CLI:
+```
+docker run -d \
+  --name status-overlay \
+  --user 1000:1002 \
+  -e TZ=America/New_York \
+  -e SCHEDULE=06:00 \
+  -e RUN_NOW=false \
+  -v /path/to/status-overlay/config:/config:rw \
+  -v /path/to/kometa/overlays:/path/to/kometa/overlays:rw \
+  --restart unless-stopped \
+  dweagle/status-overlay:latest
+```
+Eample Docker Compose:
+```YAML
+services:
+  status-overlay:
+    image: dweagle/status-overlay:latest
+    container_name: status-overlay
+    user: 1000:1002
+    environment:
+      - TZ=America/New_York  # System time and called for some overlays
+      - SCHEDULE=06:00       # Schedule run time
+      - RUN_NOW:false        # true will bypass the schedule once on container startup
+    volumes:
+      # Mount your local directory to the containers internal config folder.
+      # By default, the logs, settings, and overlays will be created here.
+      - /path/to/status-overlay/config:/config:rw 
+      # If you want overlay files to go to a seperate folder, ex. inside kometa, do
+      # another mount to the save folder you entered in the settings (overlay_save_folder:)
+      # Make sure the path matches the settings file path.
+      - /path/to/kometa/overlays:/path/to/kometa/overlays:rw
+    restart: unless-stopped  
+```
+## Manual Run
+If you are doing testing on your overlay settings and don't want to restart the container
+multiple times or set the env RUN_NOW variable to true, you can connect to the running 
+container and run the following command.  It will run the main.py script and do a complete run.
+```ruby
+python3 main.py -r
+or
+python3 main.py --run-now
+```

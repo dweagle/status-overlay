@@ -403,7 +403,7 @@ templates:
             airing_next_settings = use_overlays.get('airing_next', {})
 
             # Calculate dates for Airing Next Section based off days_ahead in settings
-            days_ahead = min(settings.get('days_ahead', 28), 30)  # Ensure it doesn't exceed 30 days
+            days_ahead = min(get_with_defaults(overlay_settings, 'days_ahead', 'days_ahead'), 30)  # Ensure it doesn't exceed 30 days
             airing_next_dates = [(current_date + timedelta(days=i)).strftime('%m/%d/%Y') for i in range(1, days_ahead + 1)]
 
             if get_with_defaults(airing_next_settings, "use", "use"):  # If "use" is True, include this section
@@ -562,7 +562,7 @@ templates:
             returns_next_settings = use_overlays.get('returns_next', {})
 
             # Calculate dates for Returns Next Section based off days_ahead in settings
-            days_ahead = min(settings.get('days_ahead', 28), 30)  # Ensure it doesn't exceed 30 days
+            days_ahead = min(get_with_defaults(overlay_settings, 'days_ahead', 'days_ahead'), 30)  # Ensure it doesn't exceed 30 days
             returns_next_dates = [(current_date + timedelta(days=i)).strftime('%m/%d/%Y') for i in range(1, days_ahead + 1)]
 
             if get_with_defaults(returns_next_settings, "use", "use"):  # If 'use' is True, include this section

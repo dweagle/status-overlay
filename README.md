@@ -1,8 +1,9 @@
 <div align="center"><h1>STATUS-OVERLAY</h1></div>
 
-<div align="center">Creates YAML files that can be used for <a href="https://github.com/Kometa-Team/Kometa">Kometa</a> overlays showing airing status on posters.</div>    
+<div align="center">Creates customized YAML files that can be used in <a href="https://github.com/Kometa-Team/Kometa">Kometa</a> overlays showing airing status on posters.</div>    
 <div align="center">(Upcoming, Returning, Ended, Canceled, New Series,</div>
 <div align="center">New - Airs MM/DD, Airing, Airs Next MM/DD, and Returns MM/DD)</div>
+<div align="center">It can also create a 'Returning Soon' collection to display shows that will return to airing)</div>
 <br>
 <div align="center">Inspired from <a href="https://github.com/InsertDisc/pattrmm">pattrmm</a> by InsertDisc</div>
 <br>

@@ -167,4 +167,8 @@ returning_soon_collection:
   poster_path:                  # Path to poster file.  Can be a url link or file path. Defaults to url Kometa git html poster.
   visible_home: "true"          # Collecition visible on home page.  "true" or "false"
   visible_shared: "true"        # Collection visible on friends/users home page. "true" or "false"
+  summary: "TV Shows returning soon!"
+  minimum_items: 1
+  delete_below_minimum: 'true'
+  sort_title: "!010_Returning"
 ```     

@@ -68,7 +68,7 @@ DEFAULTS = {
     'poster_path': 'https://raw.githubusercontent.com/meisnate12/Plex-Meta-Manager-Images/master/chart/Returning%20Soon.jpg',
     'visible_home': True,
     'visible_shared': True,
-    "summary": 'TV Shows returning soon!',
+    "summary": 'Shows returning soon!',
     "minimum_items": '1',
     "delete_below_minimum": 'true',
     "sort_title": '!010_Returning'
@@ -672,9 +672,9 @@ def create_collection_yaml(config_directory):
 
                 # Create Returning Soon collection
                 template_string = f"""
-# RETURNING SOON COLLECTION
+# {library_name} Returning Soon Collection
 collections:
-  Returning Soon:
+  {library_name} Returning Soon:
     {get_with_defaults(collection_settings, 'poster_source', 'poster_source')}_poster: "{get_with_defaults(collection_settings, 'poster_path', 'poster_path')}"
     collection_order: custom
     visible_home: {get_with_defaults(collection_settings, 'visible_home', 'visible_home')}

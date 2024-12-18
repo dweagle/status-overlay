@@ -6,6 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 logger = logging.getLogger(__name__)
+schedule_logger = logging.getLogger('schedule')
 
 scheduler = BackgroundScheduler()
 
@@ -21,7 +22,7 @@ def schedule_main(main):
 
     hour, minute = time_parts
     hour = hour.zfill(2)
-    logger.info(f"Scheduling the job to run at: {hour}:{minute}.")
+    schedule_logger.info(f"Scheduling the job to run at: {hour}:{minute}.")
 
     scheduler.add_job(
         main,
@@ -31,7 +32,7 @@ def schedule_main(main):
     )
 
     scheduler.start()
-    logger.info("Scheduler is running.")
+    schedule_logger.info("Scheduler is running.")
 
     last_log_time = datetime.now() - timedelta(minutes=15)  # Log immediately on the first run
     log_interval = timedelta(minutes=15)  # 15-minute interval for logging this message
@@ -41,8 +42,8 @@ def schedule_main(main):
             time.sleep(60)  # Sleep to reduce CPU usage
             current_time = datetime.now()
             if current_time - last_log_time >= log_interval:
-                logger.info(f"Checking schedule...Next run at {hour}:{minute}.")
+                schedule_logger.info(f"Checking schedule...Next run at {hour}:{minute}.")
                 last_log_time = current_time
     except (KeyboardInterrupt, SystemExit):
-        logger.info("Shutting down scheduler...")
+        schedule_logger.info("Shutting down scheduler...")
         scheduler.shutdown()

@@ -31,9 +31,18 @@ def log_setup():
 
     logger.info(f"Logging started. Logs located at '{log_path}'.")
 
+    # apscheduler messages for console only
     apscheduler_logger = logging.getLogger('apscheduler')
-    apscheduler_logger.setLevel(logging.ERROR)
+    apscheduler_logger.setLevel(logging.WARNING)
     apscheduler_console_handler = logging.StreamHandler()
     apscheduler_console_handler.setFormatter(log_formatter)
     apscheduler_logger.addHandler(apscheduler_console_handler)
     apscheduler_logger.propagate = False
+
+    # running schedule notification for console only
+    schedule_logger = logging.getLogger('schedule')
+    schedule_logger.setLevel(logging.INFO)
+    schedule_console_handler = logging.StreamHandler()
+    schedule_console_handler.setFormatter(log_formatter)
+    schedule_logger.addHandler(schedule_console_handler)
+    schedule_logger.propagate = False

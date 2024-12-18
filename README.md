@@ -47,8 +47,8 @@ to NOT use watch_region or with_original_language settings.
 
 libraries:                   # Plex library (SHOWS ONLY) names to create Kometa overlays for.
   TV Shows:                  # Change, add, or remove - Need at least one library.
-    is_anime: False          # Removes TMDB with_original_language:'en' setting for use with Anime libraries or libraries with non English shows.         
-    use_watch_region: True   # Removes TMDB watch_region and watch_monetization settings.
+    is_anime: False          # True removes TMDB with_original_language:'en' setting for use with Anime libraries or libraries with non English shows.         
+    use_watch_region: True   # False removes TMDB watch_region and watch_monetization settings.
   4k TV Shows:
     is_anime: False
     use_watch_region: True
@@ -61,7 +61,7 @@ libraries:                   # Plex library (SHOWS ONLY) names to create Kometa 
 overlay_settings:                  
   days_ahead: 28                # Days ahead for Returning Next (30 Days Max).
   overlay_save_folder:          # Kometa overlay folders (leave blank for config folder). Kometa must have permissions to this folder
-  font:                         # Kometa must have permissions for this folder. Will default to included font in 'config/fonts/Inter-Medium.ttf'.
+  font:                         # Path placed in final yaml for Kometa to use. Kometa ust have permissions for this folder. Will default to included font in 'config/fonts/Inter-Medium.ttf'.
   font_size: 45                 # Font size for overlay text.
   font_color: "#FFFFFF"         # Font color (kometa requires #RGB, #RGBA, #RRGGBB or #RRGGBBAA, e.g., #FFFFFF).
   horizontal_align: center      # Horizontal alignment (e.g., center, left, right).
@@ -73,7 +73,7 @@ overlay_settings:
   back_radius: 30               # Corner radius for rounded backgrounds.
   ignore_blank_results: "true"  # Kometa error processing (true or false).
 
-  # TMDB DISCOVER SETTINGS #    SEE TMDB API FOR MORE DETAILS - THESE SETTINGS ARE IDEAL.
+  # TMDB DISCOVER SETTINGS #    SEE TMDB API FOR MORE DETAILS - THESE DEFAULT SETTINGS ARE IDEAL.
   with_status: 0                # TMDB DISCOVER - Returning Series: 0 Planned: 1 In Production: 2 Ended: 3 Canceled: 4 Pilot: 5.
   watch_region: US              # TMDB DISCOVER - Default US - Must be valid TMDB region code.
   with_original_language: en    # TMDB DISCOVER - Default is en (English) - Must Be valid TMDB language code.
@@ -146,8 +146,8 @@ use_overlays:
 returning_soon_collection:
   use: True                     # True to create collection yml. False to not create.
   collection_save_folder:       # Path to collection yml folder (leave blank for /config folder). Kometa-must have permissions to this folder.
-  poster_source: url            # url or file.  url for outside source, file for local poster. Defaults to url
-  poster_path:                  # Path to poster file.  Can be a url link or file path. Defaults to url Kometa git html poster.
+  poster_source: url            # url or file.  url for outside source, file for local poster. Defaults to url and kometa github poster.  
+  poster_path:                  # Path placed in final yaml for Kometa to use. Kometa ust have permissions for this folder  Can be a url link or file path. Defaults to url Kometa git html poster.
   visible_home: "true"          # Collecition visible on home page.  "true" or "false"
   visible_shared: "true"        # Collection visible on friends/users home page. "true" or "false"
   summary: "TV Shows returning soon!"

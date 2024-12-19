@@ -27,7 +27,8 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # Copy fonts and application source code
 COPY ./fonts /fonts
-COPY . .
+COPY ./scripts /app/scripts
+COPY main.py .
 
 # Stage 2: Runtime stage
 FROM python:3.10-slim AS runtime
@@ -44,7 +45,10 @@ WORKDIR /app
 # Copy only the necessary files from the builder stage
 COPY --from=builder /install /usr/local
 COPY ./fonts /fonts
-COPY . .
+COPY ./scripts /app/scripts
+COPY main.py .
+
+ENV PYTHONPYCACHEPREFIX=/app/scripts/__pycache__
 
 # Default entrypoint
 ENTRYPOINT ["python3", "main.py"]

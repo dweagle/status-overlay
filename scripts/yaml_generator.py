@@ -1,7 +1,7 @@
 import os
 import re
 import logging
-from settings import load_settings
+from scripts.settings import load_settings
 from ruamel.yaml import YAML
 from datetime import datetime, timedelta
 
@@ -668,8 +668,7 @@ def create_collection_yaml(config_directory):
                 logger.info(f"-- Returning Soon Collection 'use:' set to true. Creating Returning Soon Collection yaml for {library_name}. --")
 
                 # Create Returning Soon collection
-                template_string = f"""
-# {library_name} Returning Soon Collection
+                template_string = f"""# {library_name} Returning Soon Collection
 collections:
   {library_name} Returning Soon:
     {get_with_defaults(collection_settings, 'poster_source', 'poster_source')}_poster: "{get_with_defaults(collection_settings, 'poster_path', 'poster_path')}"

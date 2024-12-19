@@ -216,17 +216,22 @@ def update_settings_file(main_directory):
         # Update existing settings with default settings, but skip libraries section
         updated_settings = update_dict(existing_settings, settings)
         
-        # Save the updated settings back to the file
-        with open(settings_file_path, 'w') as file:
-            yaml.dump(updated_settings, file)
-        # Reopen the file to add blank lines between sections
-        with open(settings_file_path, 'r+') as file:
-            yaml_output = file.read()
-            formatted_output = add_blank_lines(yaml_output)
-            file.seek(0)
-            file.write(formatted_output)
-            file.truncate()
-        logger.info(f"Updated settings file at '{settings_file_path}' with missing sections")
-    
+        # Check if there are any updates to the settings
+        if existing_settings != updated_settings:
+            # Save the updated settings back to the file
+            with open(settings_file_path, 'w') as file:
+                yaml.dump(updated_settings, file)
+            # Reopen the file to add blank lines between sections
+            with open(settings_file_path, 'r+') as file:
+                yaml_output = file.read()
+                formatted_output = add_blank_lines(yaml_output)
+                file.seek(0)
+                file.write(formatted_output)
+                file.truncate()
+                
+            logger.info(f"Updated settings file at '{settings_file_path}' with missing sections")
+        else:
+            logger.info(f"No updates were made to the settings file at '{settings_file_path}'")
+            
     except Exception as e:
         logger.error(f"Error updating settings file: {e}")

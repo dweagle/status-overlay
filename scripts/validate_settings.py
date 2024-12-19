@@ -2,7 +2,7 @@ import os
 import re
 import logging
 from ruamel.yaml import YAML
-from settings import load_settings
+from scripts.settings import load_settings
 
 yaml = YAML()
 

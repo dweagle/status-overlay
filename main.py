@@ -4,13 +4,15 @@ import signal
 import sys
 import logging
 import argparse
-from logger import log_setup
-from scheduler import schedule_main, scheduler
-from settings import create_settings_file, update_settings_file
-from validate_settings import validate_settings
-from yaml_generator import create_library_yaml, create_collection_yaml
+from scripts.logger import log_setup
+from scripts.scheduler import schedule_main, scheduler
+from scripts.settings import create_settings_file, update_settings_file
+from scripts.validate_settings import validate_settings
+from scripts.yaml_generator import create_library_yaml, create_collection_yaml
 
 logger = logging.getLogger(__name__)
+
+os.environ['PYTHONPYCACHEPREFIX'] = os.path.join(os.path.dirname(__file__), 'scripts', '__pycache__')
 
 in_docker = os.getenv("IN_DOCKER", "false").strip().lower() == "true"
 
@@ -47,7 +49,7 @@ def main():
                 logger.info("Please edit the 'overlay-settings.yml' to your preferred Kometa settings and rerun the script.")
             return  # Exit the script after creating the settings file
         
-        logger.info("Updating settings file with missing sections...")
+        logger.info("Checking settings file for missing or new updated sections...")
         update_settings_file(config_directory)
 
         logger.info("Validating settings file...")

@@ -11,6 +11,7 @@ from scripts.validate_settings import validate_settings
 from scripts.yaml_generator import create_library_yaml, create_collection_yaml
 
 logger = logging.getLogger(__name__)
+schedule_logger = logging.getLogger('schedule')
 
 os.environ['PYTHONPYCACHEPREFIX'] = os.path.join(os.path.dirname(__file__), 'scripts', '__pycache__')
 
@@ -26,7 +27,7 @@ font_src = '/fonts' if in_docker else os.path.join(os.getcwd(), 'fonts')
 font_dest = os.path.join(config_directory, 'fonts')
 
 def graceful_shutdown(signal_num, _):
-    logger.info(f"Received signal {signal_num} ({signal.Signals(signal_num).name}). Initiating graceful shutdown...")
+    schedule_logger.info(f"Received signal {signal_num} ({signal.Signals(signal_num).name}). Initiating graceful shutdown...")
     if scheduler.running:
         scheduler.shutdown(wait=False)
     sys.exit(0)

@@ -34,7 +34,7 @@ See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) fo
 
 5. Set your daily schedule for your script/container and enjoy!
 
-## Default Settings File
+# Default Settings File
 
 ```YAML
 # Settings for overlay configurations
@@ -156,7 +156,7 @@ returning_soon_collection:
   sort_title: "!010_Returning"
 ```
 
-## Docker Setup
+# Docker Setup
 ### Image available on [dockerhub](https://hub.docker.com/r/dweagle/status-overlay)
 Example Docker CLI:
 ```
@@ -192,7 +192,7 @@ services:
       - /path/to/kometa/overlays:/path/to/kometa/overlays:rw
     restart: unless-stopped  
 ```
-## Manual Run
+### Manual Run
 If you are doing testing on your overlay settings and don't want to restart the container
 multiple times or set the env RUN_NOW variable to true, you can connect to the running 
 container and run the following command.  It will run the main.py script and do a complete run.
@@ -200,4 +200,28 @@ container and run the following command.  It will run the main.py script and do 
 python3 main.py -r
 or
 python3 main.py --run-now
+```
+# Local Setup (Linux)
+Local setup requires a recent version of Python to be installed.
+
+1. Clone the repository to your home directory and then enter that directory.
+```
+git clone https://github.com/dweagle/status-overlay
+cd status-overlay
+```
+2. Inside that directory create a virtual environment.
+```
+python3 -m venv status-overlay-venv
+```
+3. Activate the virtual environment.
+```
+source status-overlay-venv/bin/activate
+```
+4. Install any python requirements.
+```
+python3 -m pip install -r requirements.txt
+```
+5. Run status-overlay.
+```
+python3 main.py -r
 ```

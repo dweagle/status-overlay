@@ -193,9 +193,7 @@ services:
     restart: unless-stopped  
 ```
 ### Manual Run
-If you are doing testing on your overlay settings and don't want to restart the container
-multiple times or set the env RUN_NOW variable to true, you can connect to the running 
-container and run the following command.  It will run the main.py script and do a complete run.
+If you are doing testing on your overlay settings and don't want to restart the container multiple times or set the env RUN_NOW variable to true, you can connect to the running container and run the following command.  It will run the main.py script and do a complete run.
 ```ruby
 python3 main.py -r
 or
@@ -221,17 +219,27 @@ source status-overlay-venv/bin/activate
 ```
 python3 -m pip install -r requirements.txt
 ```
-5. Run status-overlay. This will create a settings file that you can edit your overlay and
-   the Returning Soon Collection preferences. This runs the script one time and exits.
+5. Run status-overlay. This will create a settings file that you can edit your overlay and the Returning Soon Collection preferences. This runs the script one time and exits.
 ```
-python3 main.py -r or python3 main.py --run_now
+python3 main.py -r
+```
+or
+```
+python3 main.py --run_now
 ```
 6. After adjusting your settings, run the script again to create your Kometa YAMLs.
 ```
-python3 main.py -r or python3 main.py --run_now
+python3 main.py -r
 ```
-7. You can return to this virtual environment daily and run the script. Or set up a cron job
-   for automated daily scheduling using the command below along with your cron job settings.
+or
+```
+python3 main.py --run_now
+```
+7. Deactivate your virtual environment
+```
+deactivate
+```
+7. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run should be set.  This will ensure Kometa has updated dates in the YAML files.
 ```
 cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 
 ```

@@ -1,7 +1,5 @@
 import os
 import re
-import sys
-import signal
 import logging
 from settings import load_settings
 from ruamel.yaml import YAML
@@ -9,7 +7,6 @@ from datetime import datetime, timedelta
 
 # Initialize YAML handler for writing to files
 yaml = YAML()
-config_directory = '/config'
 
 # Get logger from the main.py logging configuration
 logger = logging.getLogger(__name__)  # This ensures you use the same logger instance from main.py
@@ -76,7 +73,7 @@ DEFAULTS = {
 
 timezone = os.getenv('TZ', DEFAULTS['timezone'])
 
-def get_with_defaults(settings, primary_key, fallback_key=None):
+def get_with_defaults(settings, primary_key, fallback_key=None, config_directory=''):
     def is_valid_color(value):
         # Check if the value is a valid #RGB, #RGBA, #RRGGBB, or #RRGGBBAA color code.
         pattern = r"^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
@@ -152,7 +149,7 @@ templates:
       group: status
       weight: <<weight>>
       name: text(<<text>>)
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: <<font_color>>
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
@@ -223,7 +220,7 @@ templates:
       group: status
       weight: 100
       name: text({get_with_defaults(upcoming_series_settings, 'text', 'upcoming_text')})
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(upcoming_series_settings, 'font_color', 'font_color')}"
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
@@ -266,7 +263,7 @@ templates:
       group: status
       weight: 76
       name: text({get_with_defaults(new_series_settings, 'text', 'new_text')})
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(new_series_settings, 'font_color', 'font_color')}"
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
@@ -346,7 +343,7 @@ templates:
       group: status
       weight: 43
       name: text({get_with_defaults(airing_series_settings, 'text', 'airing_text')})
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(airing_series_settings, 'font_color', 'font_color')}"
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
@@ -449,7 +446,7 @@ templates:
       group: status
       weight: 9
       name: text({get_with_defaults(ended_series_settings, 'text', 'ended_text')}) 
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(ended_series_settings, 'font_color', 'font_color')}"
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
@@ -490,7 +487,7 @@ templates:
       group: status
       weight: 10
       name: text({get_with_defaults(canceled_series_settings, 'text', 'canceled_text')}) 
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(canceled_series_settings, 'font_color', 'font_color')}"
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
@@ -531,7 +528,7 @@ templates:
       group: status
       weight: 13
       name: text({get_with_defaults(returning_series_settings, 'text', 'returning_text')}) 
-      font: "{get_with_defaults(overlay_settings, 'font', 'font')}"
+      font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(returning_series_settings, 'font_color', 'font_color')}"
       horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}

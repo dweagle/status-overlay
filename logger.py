@@ -2,11 +2,8 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 
-config_directory = '/config'
-log_directory = os.path.join(config_directory, "logs")
-
-def log_setup():
-
+def log_setup(config_directory):
+    log_directory = os.path.join(config_directory, "logs")
     log_path =  os.path.join(log_directory, "status.log")
     need_roll = not os.path.isfile(log_path)
 

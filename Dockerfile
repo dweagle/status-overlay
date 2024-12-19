@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV TZ=UTC
+ENV IN_DOCKER=true
 
 # Configure timezone with fallback
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -32,6 +33,8 @@ COPY . .
 FROM python:3.10-slim AS runtime
 
 ENV TZ=UTC
+ENV IN_DOCKER=true
+
 # Configure timezone with fallback
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 

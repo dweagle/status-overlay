@@ -49,7 +49,7 @@ settings = OrderedDict({
     }),
 
     "overlay_settings": OrderedDict({
-        "days_ahead": 28,
+        "days_ahead": 30,
         "overlay_save_folder": None,
         "font": None,
         "font_size": 45,

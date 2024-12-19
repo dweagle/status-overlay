@@ -1,4 +1,3 @@
-import os
 import logging
 import time
 from datetime import datetime, timedelta
@@ -10,13 +9,11 @@ schedule_logger = logging.getLogger('schedule')
 
 scheduler = BackgroundScheduler()
 
-def schedule_main(main):
-    schedule = os.getenv("SCHEDULE", "06:00").strip()
-
+def schedule_main(main, schedule):
     time_parts = schedule.split(":")
     if len(time_parts) != 2:
         logger.warning("Invalid schedule format. Using default time: 07:00.")
-        logger.warning("Fix the 'SCHEDULE' environment setting in Docker. HH:MM required.")
+        logger.warning("Fix the 'SCHEDULE' environment schedule. HH:MM required.")
         schedule = "07:00"
         time_parts = schedule.split(":")
 

@@ -234,7 +234,7 @@ python3 main.py -r
 ```YAML
 deactivate
 ```
-8. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run should would be ideal.  This will ensure Kometa has updated dates in the YAML files.
+8. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run would be ideal.  This will ensure Kometa has updated dates in the YAML files.
 ```YAML
 cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 
 ```

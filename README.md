@@ -10,17 +10,19 @@
 <div align="center"> Example Posters </div>
 <div align="center"><img src="readme_docs/example1.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example2.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example3.jpg" alt="Example Posters" width="200" height="300"></div>
 <div align="center"><img src="readme_docs/example4.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example5.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example6.jpg" alt="Example Posters" width="200" height="300"></div>
+<br>
+<div align="center"> Example Collection </div>
 <div align="center"><img src="readme_docs/example7.png" alt="Example Posters" width ="600"></div>
 
 ## What does this script do?
-If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, status-overlay can create .yml files used by Kometa to create a status overlay on your posters that will show users the airing status of the TV show media in your library.  The default status overlay in Kometa shows returning, ended, and canceled show status. Status-overlay created YAML files can ask Kometa to add airing and returning dates that are updated daily to give users more information. (My significant other loves to know when her shows are on and returning with a quick glance!)  
+If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, status-overlay can create YAML files used by Kometa to create a status overlay on your posters that will show users the airing status of the TV show media in your library.  The default status overlay in Kometa shows returning, ended, and canceled show status. Status-overlay created YAML files can ask Kometa to add airing and returning dates that are updated daily to give users more information. (My significant other loves to know when her shows are on and returning with a quick glance!)  
 
 Status-overlay can also create a 'Returning Soon' collection YAML that will display on Plex's home and library recommendation pages.
 
 ## How does this script work?
 Once setup, the script will create a default-settings file in the main config folder (see below) that will allow you to customize the look of your overlays. You can adjust the size, color, font, location, etc. of your overlay to your liking.  You must have knowlege of how Kometa uses these settings or use the default status settings to create overlays just like in the pictures above.
 
-After adjusting your settings file, you will run the script again. It will then create a YAML for each library designated in the settings file. These YAML files can be created in your config folder, directly where you keep your Kometa overlay YAMLs, or other locations you choose.  The script will run on a schedule and adjust the dates in the YAML daily to upsate the overlay dates.
+After adjusting your settings file, you will run the script again. It will then create a YAML for each library designated in the settings file. These YAML files can be created in your config folder, directly where you keep your Kometa overlay YAMLs, or other locations you choose.  The script will run on a schedule and adjust the dates in the YAML daily to update the overlay dates.
 
 ## Getting Started
 See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) for more help.
@@ -31,12 +33,12 @@ See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) fo
 
 3. After adjusting your settings, start the script/container again.  The YAML files will be created at your designated location from the settings file.
 
-4. Adjust your Kometa config [(using files)](https://kometa.wiki/en/latest/config/files/#location-types-and-paths) to use these YAML files in your overlay settings. Run Kometa to apply.
+4. Adjust your Kometa config [(using files)](https://kometa.wiki/en/latest/config/files/#location-types-and-paths) to use these YAML files in your overlay/collection run. Run Kometa to apply.
 
-5. Set your daily schedule for your script/container and enjoy!
+5. Set your daily schedule for your script/container and enjoy! Container run time can be set with an environmental.  Local runs can be set with a cron/task scheduler job.
 
 # Default Settings File
-
+This default setting file will be created on first run for you.  It will create YAML files are like the images at the top of the README. Settings that Kometa uses to apply overlays/collections can be modified in this settings file.
 ```YAML
 # Settings for overlay configurations
 Kometa can use TMDB Dicover api to grab series info to find air dates, etc.  Using the default settings
@@ -232,7 +234,7 @@ python3 main.py -r
 ```YAML
 deactivate
 ```
-8. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run should be set.  This will ensure Kometa has updated dates in the YAML files.
+8. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run would be ideal.  This will ensure Kometa has updated dates in the YAML files.
 ```YAML
 cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 
 ```

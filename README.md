@@ -33,9 +33,9 @@ See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) fo
 
 3. After adjusting your settings, start the script/container again.  The YAML files will be created at your designated location from the settings file.
 
-4. Adjust your Kometa config [(using files)](https://kometa.wiki/en/latest/config/files/#location-types-and-paths) to use these YAML files in your overlay settings. Run Kometa to apply.
+4. Adjust your Kometa config [(using files)](https://kometa.wiki/en/latest/config/files/#location-types-and-paths) to use these YAML files in your overlay/collection run. Run Kometa to apply.
 
-5. Set your daily schedule for your script/container and enjoy!
+5. Set your daily schedule for your script/container and enjoy! Container run time can be set with an environmental.  Local runs can be set with a cron/task scheduler job.
 
 # Default Settings File
 

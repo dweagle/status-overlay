@@ -221,7 +221,17 @@ source status-overlay-venv/bin/activate
 ```
 python3 -m pip install -r requirements.txt
 ```
-5. Run status-overlay.
+5. Run status-overlay. This will create a settings file that you can edit your overlay and
+   the Returning Soon Collection preferences. This runs the script one time and exits.
 ```
-python3 main.py -r
+python3 main.py -r or python3 main.py --run_now
+```
+6. After adjusting your settings, run the script again to create your Kometa YAMLs.
+```
+python3 main.py -r or python3 main.py --run_now
+```
+7. You can return this virtual environment daily and run the script. Or set up a cron job
+   for automated daily scheduling using the command below along with your cron job settings.
+```
+cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 
 ```

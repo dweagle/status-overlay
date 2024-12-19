@@ -223,23 +223,15 @@ python3 -m pip install -r requirements.txt
 ```
 python3 main.py -r
 ```
-or
-```
-python3 main.py --run_now
-```
 6. After adjusting your settings, run the script again to create your Kometa YAMLs.
 ```
 python3 main.py -r
-```
-or
-```
-python3 main.py --run_now
 ```
 7. Deactivate your virtual environment
 ```
 deactivate
 ```
-7. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run should be set.  This will ensure Kometa has updated dates in the YAML files.
+8. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run should be set.  This will ensure Kometa has updated dates in the YAML files.
 ```
 cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 
 ```

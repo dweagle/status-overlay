@@ -10,6 +10,7 @@
 <div align="center"> Example Posters </div>
 <div align="center"><img src="readme_docs/example1.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example2.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example3.jpg" alt="Example Posters" width="200" height="300"></div>
 <div align="center"><img src="readme_docs/example4.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example5.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example6.jpg" alt="Example Posters" width="200" height="300"></div>
+<div align="center"> Example Collection </div>
 <div align="center"><img src="readme_docs/example7.png" alt="Example Posters" width ="600"></div>
 
 ## What does this script do?

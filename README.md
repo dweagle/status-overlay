@@ -204,35 +204,35 @@ python3 main.py --run-now
 Local setup requires a recent version of Python to be installed.
 
 1. Clone the repository to your home directory and then enter that directory.
-```
+```YAML
 git clone https://github.com/dweagle/status-overlay
 cd status-overlay
 ```
 2. Inside that directory create a virtual environment.
-```
+```YAML
 python3 -m venv status-overlay-venv
 ```
 3. Activate the virtual environment.
-```
+```YAML
 source status-overlay-venv/bin/activate
 ```
 4. Install any python requirements.
-```
+```YAML
 python3 -m pip install -r requirements.txt
 ```
 5. Run status-overlay. This will create a settings file that you can edit your overlay and the Returning Soon Collection preferences. This runs the script one time and exits.
-```
+```YAML
 python3 main.py -r
 ```
 6. After adjusting your settings, run the script again to create your Kometa YAMLs.
-```
+```YAML
 python3 main.py -r
 ```
 7. Deactivate your virtual environment
-```
+```YAML
 deactivate
 ```
 8. You can return to this virtual environment daily and run the script manually using the commands from above. Or, set up a cron job for automated daily scheduling using the command below along with your cron job settings. A runtime set anytime before your Kometa run should be set.  This will ensure Kometa has updated dates in the YAML files.
-```
+```YAML
 cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 
 ```

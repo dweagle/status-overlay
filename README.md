@@ -15,7 +15,7 @@
 <div align="center"><img src="readme_docs/example7.png" alt="Example Posters" width ="600"></div>
 
 ## What does this script do?
-If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, status-overlay can create .yml files used by Kometa to create a status overlay on your posters that will show users the airing status of the TV show media in your library.  The default status overlay in Kometa shows returning, ended, and canceled show status. Status-overlay created YAML files can ask Kometa to add airing and returning dates that are updated daily to give users more information. (My significant other loves to know when her shows are on and returning with a quick glance!)  
+If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, status-overlay can create YAML files used by Kometa to create a status overlay on your posters that will show users the airing status of the TV show media in your library.  The default status overlay in Kometa shows returning, ended, and canceled show status. Status-overlay created YAML files can ask Kometa to add airing and returning dates that are updated daily to give users more information. (My significant other loves to know when her shows are on and returning with a quick glance!)  
 
 Status-overlay can also create a 'Returning Soon' collection YAML that will display on Plex's home and library recommendation pages.
 

@@ -230,7 +230,7 @@ python3 main.py -r or python3 main.py --run_now
 ```
 python3 main.py -r or python3 main.py --run_now
 ```
-7. You can return this virtual environment daily and run the script. Or set up a cron job
+7. You can return to this virtual environment daily and run the script. Or set up a cron job
    for automated daily scheduling using the command below along with your cron job settings.
 ```
 cd /path/to/status-overlay && status-overlay-venv/bin/python3 main.py -r 

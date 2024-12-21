@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 # Copy fonts and application source code
 COPY ./fonts /fonts
 COPY ./scripts /app/scripts
-COPY main.py .
+COPY status_overlay.py .
 
 # Stage 2: Runtime stage
 FROM python:3.10-slim AS runtime
@@ -46,9 +46,9 @@ WORKDIR /app
 COPY --from=builder /install /usr/local
 COPY ./fonts /fonts
 COPY ./scripts /app/scripts
-COPY main.py .
+COPY status_overlay.py .
 
 ENV PYTHONPYCACHEPREFIX=/app/scripts/__pycache__
 
 # Default entrypoint
-ENTRYPOINT ["python3", "main.py"]
+ENTRYPOINT ["python3", "status_overlay.py"]

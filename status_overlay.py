@@ -50,7 +50,7 @@ def main():
     log_setup(config_directory)
 
     if args.run_now or run_now_env:
-        logger.info("RUN_NOW is set to true. Running main.py immediately.")
+        logger.info("RUN_NOW is set to true. Running status_overlay.py immediately.")
         main_logic()
 
         if args.run_now:
@@ -60,7 +60,7 @@ def main():
             logger.info(f"Reverting to scheduled runs.")
             schedule_main(main, schedule_time)
     else:
-        logger.info("RUN_NOW is set to false. Scheduling main.py.")
+        logger.info("RUN_NOW is set to false. Scheduling status_overlay.py.")
         if not os.path.exists(settings_file_path):
             create_settings_file(config_directory, args.run_now, run_now_env, in_docker)
 

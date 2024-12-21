@@ -3,54 +3,54 @@
 <div align="center">Creates customized YAML files that can be used in <a href="https://github.com/Kometa-Team/Kometa">Kometa</a> overlays showing airing status on posters.</div>    
 <div align="center">(Upcoming, Returning, Ended, Canceled, New Series,</div>
 <div align="center">New - Airs MM/DD, Airing, Airs Next MM/DD, and Returns MM/DD)</div>
-<div align="center">It can also create a 'Returning Soon' collection to display shows that will return to airing</div>
+<div align="center">It can also create a 'Returning Soon' collection to display shows that will return to airing.</div>
 <br>
-<div align="center">Inspired from <a href="https://github.com/InsertDisc/pattrmm">pattrmm</a> by InsertDisc</div>
+<div align="center">Inspired by <a href="https://github.com/InsertDisc/pattrmm">pattrmm</a> by InsertDisc</div>
 <br>
-<div align="center"> Example Posters </div>
+<div align="center">Example Posters</div>
 <div align="center"><img src="readme_docs/example1.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example2.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example3.jpg" alt="Example Posters" width="200" height="300"></div>
 <div align="center"><img src="readme_docs/example4.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example5.jpg" alt="Example Posters" width="200" height="300">   <img src="readme_docs/example6.jpg" alt="Example Posters" width="200" height="300"></div>
 <br>
-<div align="center"> Example Collection </div>
-<div align="center"><img src="readme_docs/example7.png" alt="Example Posters" width ="600"></div>
+<div align="center">Example Collection</div>
+<div align="center"><img src="readme_docs/example7.png" alt="Example Posters" width="600"></div>
 
 ## What does this script do?
-If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, status-overlay can create YAML files used by Kometa to create a status overlay on your posters that will show users the airing status of the TV show media in your library.  The default status overlay in Kometa shows returning, ended, and canceled show status. Status-overlay created YAML files can ask Kometa to add airing and returning dates that are updated daily to give users more information. (My significant other loves to know when her shows are on and returning with a quick glance!)  
+If you are using [Kometa](https://github.com/Kometa-Team/Kometa) to manage your Plex Media Server, `status-overlay` can create YAML files used by Kometa to add a status overlay to your posters. This overlay will show users the airing status of TV show media in your library. The default status overlay in Kometa displays the status of shows as returning, ended, or canceled. YAML files created by `status-overlay` can instruct Kometa to include airing and returning dates, which are updated daily, to provide users with more information. (My significant other loves being able to quickly see when her shows are on and returning!)
 
-Status-overlay can also create a 'Returning Soon' collection YAML that will display on Plex's home and library recommendation pages.
+`status-overlay` can also create a 'Returning Soon' collection YAML that will display on Plex's home and library recommendation pages.
 
 ## How does this script work?
-Once setup, the script will create a default-settings file in the main config folder (see below) that will allow you to customize the look of your overlays. You can adjust the size, color, font, location, etc. of your overlay to your liking.  You must have knowlege of how Kometa uses these settings or use the default status settings to create overlays just like in the pictures above.
+Once set up, the script will create a default settings file in the main config folder (see below), allowing you to customize the look of your overlays. You can adjust the size, color, font, location, etc., of your overlay to your liking. You must have knowledge of how Kometa uses these settings or use the default status settings to create overlays just like in the pictures above.
 
-After adjusting your settings file, you will run the script again. It will then create a YAML for each library designated in the settings file. These YAML files can be created in your config folder, directly where you keep your Kometa overlay YAMLs, or other locations you choose.  The script will run on a schedule and adjust the dates in the YAML daily to update the overlay dates.
+After adjusting your settings file, you will run the script again. It will then create a YAML for each library designated in the settings file. These YAML files can be created in your config folder, directly where you keep your Kometa overlay YAMLs, or other locations you choose. The script will run on a schedule and adjust the dates in the YAML daily to update the overlay dates.
 
 ## Getting Started
 See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) for more help.
 
-1. Install status-overlay locally or use the docker image to create a docker container (see below).
+1. Install `status-overlay` locally or use the Docker image to create a Docker container (see below).
 
-2. Start the script/container to have it create your settings file.  Adjust settings to your liking.
+2. Start the script/container to have it create your settings file. Adjust settings to your liking.
 
-3. After adjusting your settings, start the script/container again.  The YAML files will be created at your designated location from the settings file.
+3. After adjusting your settings, start the script/container again. The YAML files will be created at your designated location from the settings file.
 
 4. Adjust your Kometa config [(using files)](https://kometa.wiki/en/latest/config/files/#location-types-and-paths) to use these YAML files in your overlay/collection run. Run Kometa to apply.
 
-5. Set your daily schedule for your script/container and enjoy! Container run time can be set with an environmental.  Local runs can be set with a cron/task scheduler job.
+5. Set your daily schedule for your script/container and enjoy! Container runtime can be set with an environment variable. Local runs can be set with a cron/task scheduler job.
 
 # Default Settings File
-This default setting file will be created on first run for you.  It will create YAML files that produce overlays like the ones in the images at the top of the README. Settings that Kometa uses to apply overlays/collections can be modified in this settings file.
-```YAML
+This default setting file will be created on the first run for you. It will create YAML files that produce overlays like the ones in the images at the top of the README. Settings that Kometa uses to apply overlays/collections can be modified in this settings file.
+```yaml
 # Settings for overlay configurations
-Kometa can use TMDB Dicover api to grab series info to find air dates, etc.  Using the default settings
+Kometa can use the TMDB Discover API to grab series info to find air dates, etc. Using the default settings
 in this file limits the "junk" show results that are pulled for a library with mainly US, English language shows.  
-You will get less "No TVDB/TMDB id" errors in Kometa when it parses this info.
+You will get fewer "No TVDB/TMDB id" errors in Kometa when it parses this info.
 
-If you have an anime library or a TV show library with lots of non English shows, it may be best
+If you have an anime library or a TV show library with lots of non-English shows, it may be best
 to NOT use watch_region or with_original_language settings.
 
 libraries:                   # Plex library (SHOWS ONLY) names to create Kometa overlays for.
   TV Shows:                  # Change, add, or remove - Need at least one library.
-    is_anime: False          # True removes TMDB with_original_language:'en' setting for use with Anime libraries or libraries with non English shows.         
+    is_anime: False          # True removes TMDB with_original_language:'en' setting for use with Anime libraries or libraries with non-English shows.         
     use_watch_region: True   # False removes TMDB watch_region and watch_monetization settings.
   4k TV Shows:
     is_anime: False
@@ -63,10 +63,10 @@ libraries:                   # Plex library (SHOWS ONLY) names to create Kometa 
 # This creates a consistent overlay across all shows.    
 overlay_settings:                  
   days_ahead: 30                # Days ahead for Returning Next (30 Days Max).
-  overlay_save_folder:          # Kometa overlay folders (leave blank for config folder). Kometa must have permissions to this folder
-  font:                         # Path placed in final yaml for Kometa to use. Kometa ust have permissions for this folder. Will default to included font in 'config/fonts/Inter-Medium.ttf'.
+  overlay_save_folder:          # Kometa overlay folders (leave blank for config folder). Kometa must have permissions to this folder.
+  font:                         # Path placed in final YAML for Kometa to use. Kometa must have permissions for this folder. Will default to included font in 'config/fonts/Inter-Medium.ttf'.
   font_size: 45                 # Font size for overlay text.
-  font_color: "#FFFFFF"         # Font color (kometa requires #RGB, #RGBA, #RRGGBB or #RRGGBBAA, e.g., #FFFFFF).
+  font_color: "#FFFFFF"         # Font color (Kometa requires #RGB, #RGBA, #RRGGBB or #RRGGBBAA, e.g., #FFFFFF).
   horizontal_align: center      # Horizontal alignment (e.g., center, left, right).
   vertical_align: top           # Vertical alignment (e.g., top, bottom, etc.).
   horizontal_offset: 0          # Horizontal offset in pixels.
@@ -78,18 +78,18 @@ overlay_settings:
 
   # TMDB DISCOVER SETTINGS #    SEE TMDB API FOR MORE DETAILS - THESE DEFAULT SETTINGS ARE IDEAL.
   with_status: 0                # TMDB DISCOVER - Returning Series: 0 Planned: 1 In Production: 2 Ended: 3 Canceled: 4 Pilot: 5.
-  watch_region: US              # TMDB DISCOVER - Default US - Must be valid TMDB region code.
-  with_original_language: en    # TMDB DISCOVER - Default is en (English) - Must Be valid TMDB language code.
+  watch_region: US              # TMDB DISCOVER - Default US - Must be a valid TMDB region code.
+  with_original_language: en    # TMDB DISCOVER - Default is en (English) - Must be a valid TMDB language code.
   limit: 500                    # TMDB DISCOVER - API Results limit. Default is 500.
-  with_watch_monetization_types: flatrate|free|ads|rent|buy  # TMDB DISCOVER - Options: flaterate, free, ads, rent, buy - can use ,(and) or |(or) as separators.
+  with_watch_monetization_types: flatrate|free|ads|rent|buy  # TMDB DISCOVER - Options: flatrate, free, ads, rent, buy - can use ,(and) or |(or) as separators.
 
-# You can decide here if you want to use each overlay, change font or backdrop color for individual overlays, or change the text.
+# You can decide here if you want to use each overlay, change the font or backdrop color for individual overlays, or change the text.
 use_overlays:
   upcoming_series:
     use: True                   # Use this overlay: True or False.
     back_color: "#FC4E03"       # Default is "#fc4e03" - Overlay color override for this overlay only.
     text: "U P C O M I N G"     # Change to desired spacing/text.
-    font_color: "#FFFFFF"       # font color override for this overlay only (Kometa requires #RGB, #RGBA, #RRGGBB or #RRGGBBAA).
+    font_color: "#FFFFFF"       # Font color override for this overlay only (Kometa requires #RGB, #RGBA, #RRGGBB or #RRGGBBAA).
     
   new_series:
     use: True
@@ -123,13 +123,13 @@ use_overlays:
 
   ended_series:
     use: True
-    back_color: "#000000"       # Default is "#000000.
+    back_color: "#000000"       # Default is "#000000".
     text: "E N D E D"
     font_color: "#FFFFFF"
 
   canceled_series:
     use: True
-    back_color: "#CF142B"       # Default is "#CF1428".
+    back_color: "#CF142B"       # Default is "#CF142B".
     text: "C A N C E L E D"
     font_color: "#FFFFFF"
 
@@ -141,18 +141,18 @@ use_overlays:
 
   returns_next:
     use: True
-    back_color: "#103197"       # Default is "#103197"
+    back_color: "#103197"       # Default is "#103197".
     text: "R E T U R N S "      # Displays as R E T U R N S  12/23 on overlays.
     font_color: "#FFFFFF"     
 
-# Creates a Returning Soon collection yml file that can be used in Kometa to display a collection in Plex
+# Creates a Returning Soon collection YAML file that can be used in Kometa to display a collection in Plex.
 returning_soon_collection:
-  use: True                     # True to create collection yml. False to not create.
-  collection_save_folder:       # Path to collection yml folder (leave blank for /config folder). Kometa-must have permissions to this folder.
-  poster_source: url            # url or file.  url for outside source, file for local poster. Defaults to url and kometa github poster.  
-  poster_path:                  # Path placed in final yaml for Kometa to use. Kometa ust have permissions for this folder  Can be a url link or file path. Defaults to url Kometa git html poster.
-  visible_home: "true"          # Collecition visible on home page.  "true" or "false"
-  visible_shared: "true"        # Collection visible on friends/users home page. "true" or "false"
+  use: True                     # True to create collection YAML. False to not create.
+  collection_save_folder:       # Path to collection YAML folder (leave blank for /config folder). Kometa must have permissions to this folder.
+  poster_source: url            # url or file. url for outside source, file for local poster. Defaults to url and Kometa GitHub poster.  
+  poster_path:                  # Path placed in final YAML for Kometa to use. Kometa must have permissions for this folder. Can be a URL link or file path. Defaults to url Kometa GitHub HTML poster.
+  visible_home: "true"          # Collection visible on home page. "true" or "false".
+  visible_shared: "true"        # Collection visible on friends/users home page. "true" or "false".
   summary: "TV Shows returning soon!"
   minimum_items: 1
   delete_below_minimum: 'true'
@@ -230,7 +230,7 @@ python3 status_overlay.py -r
 ```YAML
 python3 status_overlay.py -r
 ```
-7. Deactivate your virtual environment
+7. Deactivate your virtual environment.
 ```YAML
 deactivate
 ```

@@ -38,7 +38,7 @@ See the status-overlay [Wiki](https://github.com/dweagle/status-overlay/wiki) fo
 5. Set your daily schedule for your script/container and enjoy! Container run time can be set with an environmental.  Local runs can be set with a cron/task scheduler job.
 
 # Default Settings File
-This default setting file will be created on first run for you.  It will create YAML files are like the images at the top of the README. Settings that Kometa uses to apply overlays/collections can be modified in this settings file.
+This default setting file will be created on first run for you.  It will create YAML files that produce overlays like the ones in the images at the top of the README. Settings that Kometa uses to apply overlays/collections can be modified in this settings file.
 ```YAML
 # Settings for overlay configurations
 Kometa can use TMDB Dicover api to grab series info to find air dates, etc.  Using the default settings

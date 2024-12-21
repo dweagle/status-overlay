@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-logger = logging.getLogger(__name__)
 schedule_logger = logging.getLogger('schedule')
 
 scheduler = BackgroundScheduler()
@@ -12,9 +11,9 @@ scheduler = BackgroundScheduler()
 def schedule_main(main, schedule):
     time_parts = schedule.split(":")
     if len(time_parts) != 2:
-        logger.warning("Invalid schedule format. Using default time: 07:00.")
-        logger.warning("Fix the 'SCHEDULE' environment schedule. HH:MM required.")
-        schedule = "07:00"
+        schedule_logger.warning("Invalid schedule format. Using default time: 06:00.")
+        schedule_logger.warning("Fix the 'SCHEDULE' environment schedule. HH:MM required.")
+        schedule = "06:00"
         time_parts = schedule.split(":")
 
     hour, minute = time_parts

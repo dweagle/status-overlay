@@ -198,9 +198,9 @@ services:
 ### Manual Run
 If you are doing testing on your overlay settings and don't want to restart the container multiple times or set the env RUN_NOW variable to true, you can connect to the running container and run the following command.  It will run the main.py script and do a complete run.
 ```ruby
-python3 main.py -r
+python3 status_overlay.py -r
 or
-python3 main.py --run-now
+python3 status_overlay.py --run-now
 ```
 # Local Setup (Linux)
 Local setup requires a recent version of Python to be installed.
@@ -224,11 +224,11 @@ python3 -m pip install -r requirements.txt
 ```
 5. Run status-overlay. This will create a settings file that you can edit your overlay and the Returning Soon Collection preferences. This runs the script one time and exits.
 ```YAML
-python3 main.py -r
+python3 status_overlay.py -r
 ```
 6. After adjusting your settings, run the script again to create your Kometa YAMLs.
 ```YAML
-python3 main.py -r
+python3 status_overlay.py -r
 ```
 7. Deactivate your virtual environment
 ```YAML

@@ -1,6 +1,6 @@
 <div align="center"><img src="readme_docs/status-overlay.png" alt="Example Posters" width="100" height="100"><h1>STATUS-OVERLAY</h1></div>
 
-<div align="center">Creates customized YAML files that can be used in <a href="https://github.com/Kometa-Team/Kometa">Kometa</a> overlays showing airing status on posters.</div>
+<div align="center">Creates customized YAML files that can be used in <a href="https://github.com/Kometa-Team/Kometa">Kometa</a> overlays showing airing status on posters.</div><br>
 <div align="center"><img src="readme_docs/status-returning.png" alt="status image" height="15">  <img src="readme_docs/status-canceled.png" alt="status image" height="15"> <img src="readme_docs/status-ended.png" alt="status image" height="15"> <img src="readme_docs/status-airing.png" alt="status image" height="15"> <br> <img src="readme_docs/status-airstoday.png" alt="status image" height="15"> <img src="readme_docs/status-airingMMDD.png" alt="status image" height="15"> <img src="readme_docs/status-newseries.png" alt="status image" height="15">  <img src="readme_docs/status-newairsMMDD.png" alt="status image" height="15">  </div>
 <div align="center">(Upcoming, Returning, Ended, Canceled, New Series,</div>
 <div align="center">New - Airs MM/DD, Airing, Airs Next MM/DD, and Returns MM/DD)</div>

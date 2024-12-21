@@ -146,11 +146,12 @@ settings = OrderedDict({
     })
 })
 
-def create_settings_file(main_directory):
+def create_settings_file(main_directory, run_now, run_now_env, in_docker):
     # Create the settings.yaml file in the same directory as the script.
     settings_file_path = os.path.join(main_directory, settings_filename)
-    
+
     try:
+        logger.info(f"Settings file not found at '{settings_file_path}', creating a default settings file.")
         with open(settings_file_path, 'w') as file:
             yaml.dump(settings, file)
         # Reopen the file to add blank lines between sections
@@ -161,7 +162,17 @@ def create_settings_file(main_directory):
             file.write(formatted_output)
             file.truncate()
         logger.info(f"Created settings file at '{settings_file_path}'")
-    
+        
+        if in_docker and not (run_now or run_now_env):
+            logger.info("Please edit the 'overlay-settings.yml' to your liking. Overlays will be created at scheduled run.")
+            logger.info("If you would like to create overlays now, set RUN_NOW to True in your compose file and restart the container or complete a manual run.")
+
+        if in_docker and (run_now or run_now_env):
+            logger.info("Please edit the 'overlay-settings.yml' to your liking. Restart the container to create overlays now.")
+
+        if not in_docker:
+            logger.info("Please edit the 'overlay-settings.yml' to your liking. Run the script again to create overlays.")
+                    
     except Exception as e:
         logger.error(f"Error creating settings file: {e}")
 
@@ -211,6 +222,7 @@ def update_settings_file(main_directory):
     settings_file_path = os.path.join(main_directory, settings_filename)
     
     try:
+        logger.info("Checking settings file for missing or new updated sections...")
         existing_settings = load_settings(main_directory, log_message=False)
         
         # Update existing settings with default settings, but skip libraries section

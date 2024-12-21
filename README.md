@@ -62,7 +62,7 @@ libraries:                   # Plex library (SHOWS ONLY) names to create Kometa 
 # These settings are used across all status overlays.  
 # This creates a consistent overlay across all shows.    
 overlay_settings:                  
-  days_ahead: 28                # Days ahead for Returning Next (30 Days Max).
+  days_ahead: 30                # Days ahead for Returning Next (30 Days Max).
   overlay_save_folder:          # Kometa overlay folders (leave blank for config folder). Kometa must have permissions to this folder
   font:                         # Path placed in final yaml for Kometa to use. Kometa ust have permissions for this folder. Will default to included font in 'config/fonts/Inter-Medium.ttf'.
   font_size: 45                 # Font size for overlay text.

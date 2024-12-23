@@ -65,6 +65,7 @@ libraries:                   # Plex library (SHOWS ONLY) names to create Kometa 
 # This creates a consistent overlay across all shows.    
 overlay_settings:                  
   days_ahead: 30                # Days ahead for Returning Next (30 Days Max).
+  date_delimiter: "/"           # Change date delimiter that displays on overlay - Default "/" - must be "/", ".", "-", or "_".
   overlay_save_folder:          # Kometa overlay folders (leave blank for config folder). Kometa must have permissions to this folder.
   font:                         # Path placed in final YAML for Kometa to use. Kometa must have permissions for this folder. Will default to included font in 'config/fonts/Inter-Medium.ttf'.
   font_size: 45                 # Font size for overlay text.
@@ -155,10 +156,10 @@ returning_soon_collection:
   poster_path:                  # Path placed in final YAML for Kometa to use. Kometa must have permissions for this folder. Can be a URL link or file path. Defaults to url Kometa GitHub HTML poster.
   visible_home: "true"          # Collection visible on home page. "true" or "false".
   visible_shared: "true"        # Collection visible on friends/users home page. "true" or "false".
-  summary: "TV Shows returning soon!"
-  minimum_items: 1
-  delete_below_minimum: 'true'
-  sort_title: "!010_Returning"
+  summary: "Shows returning soon!" # Collection summary displayed on Plex collection page.
+  minimum_items: 1              # Minimum items in collection before being considered for deletion.
+  delete_below_minimum: 'true'  # Will delete collection in Plex if it goes below minimum items.
+  sort_title: "!010_Returning"  # Sort order title of collection in Plex.
 ```
 
 # Docker Setup

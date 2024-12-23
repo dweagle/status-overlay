@@ -72,6 +72,7 @@ def validate_overlay_settings(overlay_settings, config_directory):
     logger.info(f"overlay_settings:")
     validate_integer_setting(overlay_settings, 'days_ahead', 30, 1, 30)
     validate_string_setting(overlay_settings, 'overlay_save_folder', config_directory, True)
+    validate_choice_setting(overlay_settings, 'date_delimiter', ['/', '.', '-', '_'], '/')
     validate_string_setting(overlay_settings, 'font', f"{config_directory}/fonts/Inter-Medium.ttf", True)
     validate_integer_setting(overlay_settings, 'font_size', 45, 1, None)
     validate_color_setting(overlay_settings, 'font_color', '#FFFFFF')

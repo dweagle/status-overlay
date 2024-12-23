@@ -16,6 +16,7 @@ DEFAULTS = {
     'is_anime': False,
     'use_watch_region': True,
     'days_ahead': 30,
+    'date_delimiter': '/',
     'font': "{config_directory}/fonts/Inter-Medium.ttf",
     'font_size': 45,
     'font_color': '"#FFFFFF"',
@@ -300,6 +301,8 @@ templates:
             # Calculate dates for the New Airing Next sections
             new_airing_next_dates = [(current_date + timedelta(days=i)).strftime('%m/%d/%Y') for i in range(1, 15)]
 
+            date_delimiter = get_with_defaults(overlay_settings, 'date_delimiter', '/')
+            
             if get_with_defaults(new_airing_next_settings, "use", "use"):  # If 'use' is True, include this section
                 logger.info(f"{indentlog}'New Airing Next' set to true. Creating 'New Airing Next' overlay.")
                 
@@ -307,13 +310,15 @@ templates:
                     next_day_date = datetime.strptime(next_day_date_str, '%m/%d/%Y')
                     mmdd = next_day_date.strftime('%m/%d')
                     mmddyyyy = next_day_date.strftime('%m/%d/%Y')
+                    mmdd_custom = mmdd.replace('/', date_delimiter)
+                    mmddyyyy_custom = mmddyyyy.replace('/', date_delimiter)
 
                     weight = 90 - i + 1  # Start with weight 89 and decrease by 1 each iteration
                     
                     new_airing_next_section = f"""
 # NEW AIRING NEXT BANNER/TEXT DAY {i}
-  {library_name} New Airing Next {mmddyyyy}: 
-    variables: {{text: {get_with_defaults(new_airing_next_settings, 'text', 'new_airing_text')} {mmdd}, weight: {weight}, font_color: "{get_with_defaults(new_airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(new_airing_next_settings, 'back_color', 'new_airing_back_color')}", date: {mmddyyyy}, status: 0}}
+  {library_name} New Airing Next {mmddyyyy_custom}: 
+    variables: {{text: {get_with_defaults(new_airing_next_settings, 'text', 'new_airing_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(new_airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(new_airing_next_settings, 'back_color', 'new_airing_back_color')}", date: {mmddyyyy}, status: 0}}
     template: {{name: {library_name} Status}}
     filters:
       first_episode_aired.after: {date_21_days_prior}
@@ -403,6 +408,8 @@ templates:
             days_ahead = min(get_with_defaults(overlay_settings, 'days_ahead', 'days_ahead'), 30)  # Ensure it doesn't exceed 30 days
             airing_next_dates = [(current_date + timedelta(days=i)).strftime('%m/%d/%Y') for i in range(1, days_ahead + 1)]
 
+            date_delimiter = get_with_defaults(overlay_settings, 'date_delimiter', '/')
+
             if get_with_defaults(airing_next_settings, "use", "use"):  # If "use" is True, include this section
                 logger.info(f"{indentlog}'Airing Next' set to true. 'days_ahead:' set to {days_ahead}. Creating {days_ahead} 'Airing Next' overlay/s")
                 
@@ -410,13 +417,15 @@ templates:
                     next_day_date = datetime.strptime(next_day_date_str, '%m/%d/%Y')
                     mmdd = next_day_date.strftime('%m/%d')
                     mmddyyyy = next_day_date.strftime('%m/%d/%Y')
+                    mmdd_custom = mmdd.replace('/', date_delimiter)
+                    mmddyyyy_custom = mmddyyyy.replace('/', date_delimiter)
 
                     weight = 74 - i + 1  # Start with weight 74 and decrease by 1 each iteration
                     
                     airing_next_section = f"""
 # AIRING NEXT BANNER/TEXT DAY {i}
-  {library_name} Airing Next {mmddyyyy}:
-    variables: {{text: {get_with_defaults(airing_next_settings, 'text', 'next_text')} {mmdd}, weight: {weight}, font_color: "{get_with_defaults(airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_next_settings, 'back_color', 'airing_back_color')}", date: {mmddyyyy}, status: 0}}
+  {library_name} Airing Next {mmddyyyy_custom}:
+    variables: {{text: {get_with_defaults(airing_next_settings, 'text', 'next_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_next_settings, 'back_color', 'airing_back_color')}", date: {mmddyyyy}, status: 0}}
     template: {{name: {library_name} Status}}
     filters:
       last_episode_aired.after: {date_15_days_prior}
@@ -562,6 +571,8 @@ templates:
             days_ahead = min(get_with_defaults(overlay_settings, 'days_ahead', 'days_ahead'), 30)  # Ensure it doesn't exceed 30 days
             returns_next_dates = [(current_date + timedelta(days=i)).strftime('%m/%d/%Y') for i in range(1, days_ahead + 1)]
 
+            date_delimiter = get_with_defaults(overlay_settings, 'date_delimiter', '/')
+
             if get_with_defaults(returns_next_settings, "use", "use"):  # If 'use' is True, include this section
                 logger.info(f"{indentlog}'Returns Next' set to true. 'days_ahead:' set to {days_ahead}. Creating {days_ahead} 'Returns Next' overlay/s")
                 
@@ -569,13 +580,15 @@ templates:
                     next_day_date = datetime.strptime(next_day_date_str, '%m/%d/%Y')
                     mmdd = next_day_date.strftime('%m/%d')
                     mmddyyyy = next_day_date.strftime('%m/%d/%Y')
+                    mmdd_custom = mmdd.replace('/', date_delimiter)
+                    mmddyyyy_custom = mmddyyyy.replace('/', date_delimiter)
 
                     weight = 43 - i + 1  # Start with weight 43 and decrease by 1 each iteration
                     
                     returns_next_section = f"""
 # RETURNS NEXT BANNER/TEXT DAY {i}
-  {library_name} Returns Next {mmddyyyy}:
-    variables: {{text: {get_with_defaults(returns_next_settings, 'text', 'returns_text')} {mmdd}, weight: {weight}, font_color: "{get_with_defaults(returns_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(returns_next_settings, 'back_color', 'returning_back_color')}", date: {mmddyyyy}, status: 0}}
+  {library_name} Returns Next {mmddyyyy_custom}:
+    variables: {{text: {get_with_defaults(returns_next_settings, 'text', 'returns_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(returns_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(returns_next_settings, 'back_color', 'returning_back_color')}", date: {mmddyyyy}, status: 0}}
     template: {{name: {library_name} Status}}
     filters:
       last_episode_aired.before: {date_14_days_prior}

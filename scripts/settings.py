@@ -51,6 +51,7 @@ settings = OrderedDict({
     "overlay_settings": OrderedDict({
         "days_ahead": 30,
         "overlay_save_folder": None,
+        "date_delimiter": DoubleQuotedScalarString("/"),
         "font": None,
         "font_size": 45,
         "font_color": DoubleQuotedScalarString("#FFFFFF"),

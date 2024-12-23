@@ -42,4 +42,5 @@ def schedule_main(main, schedule):
                 last_log_time = current_time
     except (KeyboardInterrupt, SystemExit):
         schedule_logger.info("Shutting down scheduler...")
-        scheduler.shutdown()
+        if scheduler.running:
+            scheduler.shutdown()

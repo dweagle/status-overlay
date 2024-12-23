@@ -23,7 +23,6 @@ if not os.path.exists(config_directory):
     os.makedirs(config_directory, exist_ok=True)
 
 settings_file_path = os.path.join(config_directory, "overlay-settings.yml")
-run_now = os.getenv("RUN_NOW", "false").strip().lower() == "true"
 font_src = '/fonts' if in_docker else os.path.join(os.getcwd(), 'fonts')
 font_dest = os.path.join(config_directory, 'fonts')
 
@@ -39,6 +38,7 @@ def graceful_shutdown(signal_num, _):
     schedule_logger.info(f"Received signal {signal_num} ({signal.Signals(signal_num).name}). Initiating graceful shutdown...")
     if scheduler.running:
         scheduler.shutdown(wait=False)
+    schedule_logger.info("Shutting down script...")
     sys.exit(0)
 
 if in_docker:

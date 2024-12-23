@@ -212,6 +212,8 @@ Local setup requires a recent version of Python to be installed.
 1. Clone the repository to your home directory and then enter that directory.
 ```YAML
 git clone https://github.com/dweagle/status-overlay
+```
+```YAML
 cd status-overlay
 ```
 2. Inside that directory create a virtual environment.

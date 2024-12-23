@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)  # This ensures you use the same logger ins
 DEFAULTS = {
     'is_anime': False,
     'use_watch_region': True,
-    'days_ahead': 28,
+    'days_ahead': 30,
     'font': "{config_directory}/fonts/Inter-Medium.ttf",
     'font_size': 45,
     'font_color': '"#FFFFFF"',
@@ -137,7 +137,7 @@ def create_library_yaml(config_directory):
         for library_name, library_settings in libraries.items():
             is_anime = get_with_defaults(library_settings, 'is_anime', 'is_anime')
             use_watch_region = get_with_defaults(library_settings, 'use_watch_region', 'use_watch_region')
-            logger.info(f"-- Creating main template yaml for {library_name} --")
+            logger.info(f"Creating main template yaml for {library_name}.")
 
             # Define the template using a string with placeholders
             template_string = f"""# {library_name} Template
@@ -199,7 +199,7 @@ templates:
 
             logger.info("Main template created")
             logger.info("")
-            logger.info("-- Creating optional overlays --")
+            logger.info("Creating optional overlays")
 
 ##########################
 #### UPCOMING SERIES #####
@@ -600,15 +600,15 @@ templates:
                 overlay_save_folder = ''
 
             if overlay_save_folder:
-                logger.info(f"Using custom overlay save folder: {overlay_save_folder}")
+                logger.info(f"{indentlog}Using custom overlay save folder: {overlay_save_folder}")
             else:
-                logger.info("No custom overlay save folder provided.  Using /config folder.")
+                logger.debug(f"{indentlog}No custom overlay save folder provided.  Using '{config_directory}' folder.")
                 overlay_save_folder = config_directory
 
             # Ensure the save folder exists and exit script if it doesn't
             if not os.path.exists(overlay_save_folder):
-                logger.warning(f"Overlay folder doesn't exist or permissions not set.  Exiting script")
-                logger.warning(f"If using path outside of mounted container config volume, you need to mount a volume to this.")
+                logger.error(f"Overlay folder doesn't exist or permissions not set.  Exiting script")
+                logger.error(f"If using path outside of mounted container config volume, you need to mount a volume to this.")
                 exit()
 
             # Normalize the library name
@@ -665,7 +665,7 @@ def create_collection_yaml(config_directory):
             use_watch_region = get_with_defaults(library_settings, 'use_watch_region', 'use_watch_region')
             
             if get_with_defaults(collection_settings, "use", "collection_use"):  # If "use" is True, include this section
-                logger.info(f"-- Returning Soon Collection 'use:' set to true. Creating Returning Soon Collection yaml for {library_name}. --")
+                logger.info(f"Returning Soon Collection 'use:' set to true. Creating Returning Soon Collection yaml for {library_name}.")
 
                 # Create Returning Soon collection
                 template_string = f"""# {library_name} Returning Soon Collection
@@ -729,15 +729,15 @@ collections:
                     collection_save_folder = ''
 
                 if collection_save_folder:
-                    logger.info(f"Using custom collection save folder: {collection_save_folder}")
+                    logger.info(f"{indentlog}Using custom collection save folder: {collection_save_folder}")
                 else:
-                    logger.info("No custom collection save folder provided.  Using /config folder.")
+                    logger.debug(f"{indentlog}No custom collection save folder provided.  Using '{config_directory}' folder.")
                     collection_save_folder = config_directory
 
                 # Ensure the save folder exists and exit script if it doesn't
                 if not os.path.exists(collection_save_folder):
-                    logger.warning(f"Collection folder doesn't exist or permissions not set.  Exiting script")
-                    logger.warning(f"If using path outside of mounted container config volume, you need to mount a volume to this.")
+                    logger.error(f"Collection folder doesn't exist or permissions not set.  Exiting script")
+                    logger.error(f"If using path outside of mounted container config volume, you need to mount a volume to this.")
                     exit()
 
                 # Normalize the library name
@@ -749,7 +749,7 @@ collections:
                 try:
                     with open(output_file_path, 'w') as file:
                         file.write(template_string)
-                    logger.info(f"-- Generated Returning Soon Collection for {library_name} at '{output_file_path}' --")
+                    logger.info(f"Generated Returning Soon Collection for {library_name} at '{output_file_path}'")
                     logger.info("")
                 except Exception as e:
                     logger.error(f"Error generating collection for {library_name}: {e}")

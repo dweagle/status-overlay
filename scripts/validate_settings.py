@@ -115,6 +115,30 @@ def validate_status_overlay(status_overlay, config_directory):
             validate_color_setting(optional_settings, 'back_color', '#FFFFFF')
             validate_string_setting(optional_settings, 'text', 'default_text')
             validate_color_setting(optional_settings, 'font_color', '#FFFFFF')
+            if 'back_width' in optional_settings:
+                validate_integer_setting(optional_settings, 'back_width', 475, 0, None)
+            if 'back_height' in optional_settings:
+                validate_integer_setting(optional_settings, 'back_height', 55, 0, None)
+            if 'back_radius' in optional_settings:
+                validate_integer_setting(optional_settings, 'back_radius', 30, 0, None)
+            if 'backdrop_image' in optional_settings:
+                validate_path_setting(optional_settings, 'backdrop_image', '', True)
+            if 'bd_horizontal_align' in optional_settings:
+                validate_choice_setting(optional_settings, 'bd_horizontal_align', ['center', 'left', 'right'], 'center')
+            if 'bd_vertical_align' in optional_settings:
+                validate_choice_setting(optional_settings, 'bd_vertical_align', ['top', 'center', 'bottom'], 'top')
+            if 'bd_horizontal_offset' in optional_settings:
+                validate_integer_setting(optional_settings, 'bd_horizontal_offset', 0, 0, None)
+            if 'bd_vertical_offset' in optional_settings:
+                validate_integer_setting(optional_settings, 'bd_vertical_offset', 38, 0, None)
+            if 'text_horizontal_align' in optional_settings:
+                validate_choice_setting(optional_settings, 'text_horizontal_align', ['center', 'left', 'right'], 'center')
+            if 'text_vertical_align' in optional_settings:
+                validate_choice_setting(optional_settings, 'text_vertical_align', ['top', 'center', 'bottom'], 'top')
+            if 'text_horizontal_offset' in optional_settings:
+                validate_integer_setting(optional_settings, 'text_horizontal_offset', 0, 0, None)
+            if 'text_vertical_offset' in optional_settings:
+                validate_integer_setting(optional_settings, 'text_vertical_offset', 38, 0, None)
     else:
         logger.error(f"{indentlog2}Missing 'use_overlays' section in 'status_overlay_settings'.")
         return False
@@ -132,6 +156,30 @@ def validate_movie_new_release(movie_new_release_settings, config_directory):
     validate_color_setting(movie_new_release_settings, 'back_color', '#008001')
     validate_string_setting(movie_new_release_settings, 'text', 'default_text')
     validate_color_setting(movie_new_release_settings, 'font_color', '#FFFFFF')
+    if 'back_width' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'back_width', 475, 0, None)
+    if 'back_height' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'back_height', 55, 0, None)
+    if 'back_radius' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'back_radius', 30, 0, None)
+    if 'backdrop_image' in movie_new_release_settings:
+        validate_path_setting(movie_new_release_settings, 'backdrop_image', '', True)
+    if 'bd_horizontal_align' in movie_new_release_settings:
+        validate_choice_setting(movie_new_release_settings, 'bd_horizontal_align', ['center', 'left', 'right'], 'center')
+    if 'bd_vertical_align' in movie_new_release_settings:
+        validate_choice_setting(movie_new_release_settings, 'bd_vertical_align', ['top', 'center', 'bottom'], 'top')
+    if 'bd_horizontal_offset' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'bd_horizontal_offset', 0, 0, None)
+    if 'bd_vertical_offset' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'bd_vertical_offset', 38, 0, None)
+    if 'text_horizontal_align' in movie_new_release_settings:
+        validate_choice_setting(movie_new_release_settings, 'text_horizontal_align', ['center', 'left', 'right'], 'center')
+    if 'text_vertical_align' in movie_new_release_settings:
+        validate_choice_setting(movie_new_release_settings, 'text_vertical_align', ['top', 'center', 'bottom'], 'top')
+    if 'text_horizontal_offset' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'text_horizontal_offset', 0, 0, None)
+    if 'text_vertical_offset' in movie_new_release_settings:
+        validate_integer_setting(movie_new_release_settings, 'text_vertical_offset', 38, 0, None)
 
     return True
 

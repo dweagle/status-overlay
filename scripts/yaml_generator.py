@@ -154,6 +154,67 @@ def get_with_defaults(settings, primary_key, fallback_key=None, config_directory
 
     return value 
 
+TEXT_OVERRIDE_KEYS = (
+    'back_width', 'back_height', 'back_radius',
+    'text_horizontal_align', 'text_vertical_align',
+    'text_horizontal_offset', 'text_vertical_offset',
+)
+BD_OVERRIDE_KEYS = (
+    'bd_horizontal_align', 'bd_vertical_align',
+    'bd_horizontal_offset', 'bd_vertical_offset',
+)
+
+def any_status_uses_overrides(use_overlays, keys):
+    return any(
+        key in status_settings
+        for status_settings in use_overlays.values()
+        if isinstance(status_settings, dict)
+        for key in keys
+    )
+
+def get_backdrop_overrides(per_status_settings):
+    overrides = ""
+    for key in ('back_width', 'back_height', 'back_radius'):
+        if key in per_status_settings:
+            overrides += f", {key}: {per_status_settings[key]}"
+    return overrides
+
+def get_align_offset_overrides(per_status_settings):
+    overrides = ""
+    mapping = {
+        'bd_horizontal_align': 'horizontal_align',
+        'bd_vertical_align': 'vertical_align',
+        'bd_horizontal_offset': 'horizontal_offset',
+        'bd_vertical_offset': 'vertical_offset',
+    }
+    for setting_key, template_key in mapping.items():
+        if setting_key in per_status_settings:
+            overrides += f", {template_key}: {per_status_settings[setting_key]}"
+    return overrides
+
+def get_text_align_offset_overrides(per_status_settings):
+    overrides = ""
+    mapping = {
+        'text_horizontal_align': 'horizontal_align',
+        'text_vertical_align': 'vertical_align',
+        'text_horizontal_offset': 'horizontal_offset',
+        'text_vertical_offset': 'vertical_offset',
+    }
+    for setting_key, template_key in mapping.items():
+        if setting_key in per_status_settings:
+            overrides += f", {template_key}: {per_status_settings[setting_key]}"
+    return overrides
+
+def get_backdrop_image(backdrop_image, library_name, entry_name, weight, template_type, extra_vars="", align_offset_vars=""):
+    if not backdrop_image:
+        return ""
+    return f"""
+# {entry_name.upper()} STATUS IMAGE
+  {library_name} {entry_name} Image:
+    variables: {{weight: {weight}, file: {backdrop_image}{extra_vars}{align_offset_vars}}}
+    template: {{name: {library_name} {template_type}}}
+"""
+
 def write_yaml_file(config_directory, save_folder, name, file_name, content):
     if save_folder and isinstance(save_folder, str):
         save_folder = save_folder.strip()
@@ -273,23 +334,47 @@ templates:
       font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: <<font_color>>
-      horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
-      vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}
-      horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}
-      vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}
 """
             use_backdrop = get_with_defaults(overlay_settings, 'use_backdrop', 'use_backdrop')
+            use_text_overrides = any_status_uses_overrides(use_overlays, TEXT_OVERRIDE_KEYS)
+
+            if use_text_overrides:
+                status_string += f"{indent3}horizontal_align: <<horizontal_align>>\n"
+                status_string += f"{indent3}vertical_align: <<vertical_align>>\n"
+                status_string += f"{indent3}horizontal_offset: <<horizontal_offset>>\n"
+                status_string += f"{indent3}vertical_offset: <<vertical_offset>>\n"
+            else:
+                status_string += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                status_string += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                status_string += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                status_string += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+
             if use_backdrop:
                 logger.info(f"{indentlog2}'use_backdrop' set to 'true'")
                 logger.info(f"{indentlog3}Adding backdrop settings to yaml")
                 status_string += f"{indent3}back_color: <<back_color>>\n"
-                status_string += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
-                status_string += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
-                status_string += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
-
+                if use_text_overrides:
+                    status_string += f"{indent3}back_width: <<back_width>>\n"
+                    status_string += f"{indent3}back_height: <<back_height>>\n"
+                    status_string += f"{indent3}back_radius: <<back_radius>>\n"
+                else:
+                    status_string += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
+                    status_string += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
+                    status_string += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
             else:
                 logger.info(f"{indentlog2}'use_backdrop' set to 'false'")
                 logger.info(f"{indentlog3}Removing backdrop settings from status yaml.")
+
+            if use_text_overrides:
+                status_string += f"{indent2}default:\n"
+                status_string += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                status_string += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                status_string += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                status_string += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+                if use_backdrop:
+                    status_string += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
+                    status_string += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
+                    status_string += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
 
             status_string += f"""{indent2}ignore_blank_results: {get_with_defaults(overlay_settings, 'ignore_blank_results', 'ignore_blank_results').lower()}
     tmdb_discover:
@@ -331,26 +416,116 @@ templates:
       font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: <<font_color>>
-      horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
-      vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'veritcal_align')}
-      horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}
-      vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}
 """
-            if use_backdrop:
-                logger.info(f"{indentlog2}'use_backdrop' set to 'true'")
-                logger.info(f"{indentlog3}Adding backdrop settings to yaml")
-                plex_all += f"{indent3}back_color: <<back_color>>\n"
-                plex_all += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
-                plex_all += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
-                plex_all += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
-
+            if use_text_overrides:
+                plex_all += f"{indent3}horizontal_align: <<horizontal_align>>\n"
+                plex_all += f"{indent3}vertical_align: <<vertical_align>>\n"
+                plex_all += f"{indent3}horizontal_offset: <<horizontal_offset>>\n"
+                plex_all += f"{indent3}vertical_offset: <<vertical_offset>>\n"
             else:
-                logger.info(f"{indentlog2}'use_backdrop' set to 'false'")
-                logger.info(f"{indentlog3}Removing backdrop settings from status yaml.")
+                plex_all += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                plex_all += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                plex_all += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                plex_all += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+
+            if use_backdrop:
+                plex_all += f"{indent3}back_color: <<back_color>>\n"
+                if use_text_overrides:
+                    plex_all += f"{indent3}back_width: <<back_width>>\n"
+                    plex_all += f"{indent3}back_height: <<back_height>>\n"
+                    plex_all += f"{indent3}back_radius: <<back_radius>>\n"
+                else:
+                    plex_all += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
+                    plex_all += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
+                    plex_all += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
+
+            if use_text_overrides:
+                plex_all += f"{indent2}default:\n"
+                plex_all += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                plex_all += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                plex_all += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                plex_all += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+                if use_backdrop:
+                    plex_all += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
+                    plex_all += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
+                    plex_all += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
 
             plex_all += f"""{indent2}ignore_blank_results: {get_with_defaults(overlay_settings, 'ignore_blank_results', 'ignore_blank_results').lower()}
 """
             status_string += plex_all
+
+            use_bd_overrides = any_status_uses_overrides(use_overlays, BD_OVERRIDE_KEYS)
+
+            image_discover_template = f"""
+  {library_name} Backdrop Image TMDB Discover:
+    sync_mode: sync
+    builder_level: show
+    overlay:
+      group: status_bg
+      weight: <<weight>>
+      name: status-image
+      file: <<file>>
+"""
+            if use_bd_overrides:
+                image_discover_template += f"{indent3}horizontal_align: <<horizontal_align>>\n"
+                image_discover_template += f"{indent3}vertical_align: <<vertical_align>>\n"
+                image_discover_template += f"{indent3}horizontal_offset: <<horizontal_offset>>\n"
+                image_discover_template += f"{indent3}vertical_offset: <<vertical_offset>>\n"
+                image_discover_template += f"{indent2}default:\n"
+                image_discover_template += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                image_discover_template += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                image_discover_template += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                image_discover_template += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+            else:
+                image_discover_template += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                image_discover_template += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                image_discover_template += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                image_discover_template += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+
+            image_discover_template += f"{indent2}ignore_blank_results: {get_with_defaults(overlay_settings, 'ignore_blank_results', 'ignore_blank_results').lower()}\n"
+            image_discover_template += f"""    tmdb_discover:
+      air_date.gte: <<date>>
+      air_date.lte: <<date>>
+      with_status: <<status>>
+"""
+            if use_watch_region:
+                image_discover_template += f"{indent3}watch_region: {get_with_defaults(overlay_settings, 'watch_region')}\n"
+                image_discover_template += f"{indent3}with_watch_monetization_types: {get_with_defaults(overlay_settings, 'with_watch_monetization_types', 'with_watch_monetization_types')}\n"
+            if not is_anime:
+                image_discover_template += f"{indent3}with_original_language: {get_with_defaults(overlay_settings, 'with_original_language', 'with_original_language')}\n"
+            image_discover_template += f"{indent3}limit: {get_with_defaults(overlay_settings, 'limit', 'limit')}\n"
+
+            image_plex_all_template = f"""
+  {library_name} Backdrop Image Plex All:
+    sync_mode: sync
+    builder_level: show
+    overlay:
+      group: status_bg
+      weight: <<weight>>
+      name: status-image
+      file: <<file>>
+"""
+            if use_bd_overrides:
+                image_plex_all_template += f"{indent3}horizontal_align: <<horizontal_align>>\n"
+                image_plex_all_template += f"{indent3}vertical_align: <<vertical_align>>\n"
+                image_plex_all_template += f"{indent3}horizontal_offset: <<horizontal_offset>>\n"
+                image_plex_all_template += f"{indent3}vertical_offset: <<vertical_offset>>\n"
+                image_plex_all_template += f"{indent2}default:\n"
+                image_plex_all_template += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                image_plex_all_template += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                image_plex_all_template += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                image_plex_all_template += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+            else:
+                image_plex_all_template += f"{indent3}horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}\n"
+                image_plex_all_template += f"{indent3}vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align')}\n"
+                image_plex_all_template += f"{indent3}horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}\n"
+                image_plex_all_template += f"{indent3}vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}\n"
+
+            image_plex_all_template += f"{indent2}ignore_blank_results: {get_with_defaults(overlay_settings, 'ignore_blank_results', 'ignore_blank_results').lower()}\n"
+            any_backdrop_image = any(v.get('backdrop_image') for v in use_overlays.values() if isinstance(v, dict))
+            if any_backdrop_image:
+                status_string += image_discover_template
+                status_string += image_plex_all_template
 
             status_string += "\noverlays:"
 
@@ -365,10 +540,22 @@ templates:
             if get_with_defaults(upcoming_series_settings, "use", "use"):
                 logger.info(f"{indentlog2}'Upcoming' set to true. Creating 'Upcoming' overlay.")
 
+                si = upcoming_series_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "Upcoming Series", 100, "Backdrop Image Plex All", align_offset_vars=get_align_offset_overrides(upcoming_series_settings))
+                    status_string += f"""    plex_all: true
+    filters:
+      tmdb_status:
+        - returning
+        - planned
+        - production
+      release.after: today
+"""
+
                 upcoming_section = f"""
 # UPCOMING SERIES OVERLAY
   {library_name} Upcoming Series:
-    variables: {{text: {get_with_defaults(upcoming_series_settings, 'text', 'upcoming_text')}, weight: 100, font_color: "{get_with_defaults(upcoming_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(upcoming_series_settings, 'back_color', 'upcoming_back_color')}"}}
+    variables: {{text: {get_with_defaults(upcoming_series_settings, 'text', 'upcoming_text')}, weight: 100, font_color: "{get_with_defaults(upcoming_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(upcoming_series_settings, 'back_color', 'upcoming_back_color')}"{get_backdrop_overrides(upcoming_series_settings)}{get_text_align_offset_overrides(upcoming_series_settings)}}}
     template: {{name: {library_name} Status Plex All}}
     plex_all: true
     filters:
@@ -390,10 +577,24 @@ templates:
             if get_with_defaults(new_series_settings, "use", "use"):
                 logger.info(f"{indentlog2}'New Series' set to true. Creating 'New Series' overlay.")
 
+                si = new_series_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "New Series", 76, "Backdrop Image Plex All", align_offset_vars=get_align_offset_overrides(new_series_settings))
+                    status_string += f"""    plex_all: true
+    filters:
+      tmdb_status:
+        - returning
+        - planned
+        - production
+        - ended
+        - canceled
+      first_episode_aired.after: {date_21_days_prior}
+"""
+
                 new_series_section = f"""
 # NEW SERIES BANNER/TEXT
   {library_name} New Series:
-    variables: {{text: {get_with_defaults(new_series_settings, 'text', 'new_text')}, weight: 76, font_color: "{get_with_defaults(new_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(new_series_settings, 'back_color', 'new_back_color')}"}}
+    variables: {{text: {get_with_defaults(new_series_settings, 'text', 'new_text')}, weight: 76, font_color: "{get_with_defaults(new_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(new_series_settings, 'back_color', 'new_back_color')}"{get_backdrop_overrides(new_series_settings)}{get_text_align_offset_overrides(new_series_settings)}}}
     template: {{name: {library_name} Status Plex All}}
     plex_all: true
     filters:
@@ -429,11 +630,18 @@ templates:
                     mmddyyyy_custom = next_day_date.strftime(date_format_with_year)
 
                     weight = 90 - i + 1 
-                    
+
+                    si = new_airing_next_settings.get('backdrop_image')
+                    if si:
+                        status_string += get_backdrop_image(si, library_name, f"New Airing Next {mmddyyyy_custom}", weight, "Backdrop Image TMDB Discover", f", date: {mmddyyyy}, status: 0", get_align_offset_overrides(new_airing_next_settings))
+                        status_string += f"""    filters:
+      first_episode_aired.after: {date_21_days_prior}
+"""
+
                     new_airing_next_section = f"""
 # NEW AIRING NEXT BANNER/TEXT DAY {i}
   {library_name} New Airing Next {mmddyyyy_custom}: 
-    variables: {{text: {get_with_defaults(new_airing_next_settings, 'text', 'new_airing_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(new_airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(new_airing_next_settings, 'back_color', 'new_airing_back_color')}", date: {mmddyyyy}, status: 0}}
+    variables: {{text: {get_with_defaults(new_airing_next_settings, 'text', 'new_airing_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(new_airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(new_airing_next_settings, 'back_color', 'new_airing_back_color')}"{get_backdrop_overrides(new_airing_next_settings)}{get_text_align_offset_overrides(new_airing_next_settings)}, date: {mmddyyyy}, status: 0}}
     template: {{name: {library_name} Status TMDB Discover}}
     filters:
       first_episode_aired.after: {date_21_days_prior}
@@ -450,10 +658,22 @@ templates:
             if get_with_defaults(airing_series_settings, "use", "use"):
                 logger.info(f"{indentlog2}'Airing Series' set to true. Creating 'Airing' overlay")
 
+                si = airing_series_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "Airing Series", 43, "Backdrop Image Plex All", align_offset_vars=get_align_offset_overrides(airing_series_settings))
+                    status_string += f"""    plex_all: true
+    filters:
+      tmdb_status:
+        - returning
+        - planned
+        - production
+      last_episode_aired.after: {date_15_days_prior}
+"""
+
                 airing_series_section = f"""
 # AIRING SERIES BANNER/TEXT
   {library_name} Airing Series:
-    variables: {{text: {get_with_defaults(airing_series_settings, 'text', 'airing_text')}, weight: 43, font_color: "{get_with_defaults(airing_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_series_settings, 'back_color', 'airing_back_color')}"}}
+    variables: {{text: {get_with_defaults(airing_series_settings, 'text', 'airing_text')}, weight: 43, font_color: "{get_with_defaults(airing_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_series_settings, 'back_color', 'airing_back_color')}"{get_backdrop_overrides(airing_series_settings)}{get_text_align_offset_overrides(airing_series_settings)}}}
     template: {{name: {library_name} Status Plex All}}
     plex_all: true
     filters:
@@ -476,10 +696,14 @@ templates:
             if get_with_defaults(airing_today_settings, "use", "use"):
                 logger.info(f"{indentlog2}'Airing Today' set to true. Creating 'Airing Today' overlay.")
 
+                si = airing_today_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "Airing Today", 75, "Backdrop Image TMDB Discover", f", date: {air_date_today}, status: 0", get_align_offset_overrides(airing_today_settings))
+
                 airing_today_section = f"""
 # AIRING TODAY BANNER/TEXT
   {library_name} Airing Today:
-    variables: {{text: {get_with_defaults(airing_today_settings, 'text', 'today_text')}, weight: 75, font_color: "{get_with_defaults(airing_today_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_today_settings, 'back_color', 'airing_back_color')}", date: {air_date_today}, status: 0}}
+    variables: {{text: {get_with_defaults(airing_today_settings, 'text', 'today_text')}, weight: 75, font_color: "{get_with_defaults(airing_today_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_today_settings, 'back_color', 'airing_back_color')}"{get_backdrop_overrides(airing_today_settings)}{get_text_align_offset_overrides(airing_today_settings)}, date: {air_date_today}, status: 0}}
     template: {{name: {library_name} Status TMDB Discover}}
 """
                 status_string += airing_today_section
@@ -507,11 +731,18 @@ templates:
                     mmddyyyy_custom = next_day_date.strftime(date_format_with_year)
 
                     weight = 74 - i + 1
-                    
+
+                    si = airing_next_settings.get('backdrop_image')
+                    if si:
+                        status_string += get_backdrop_image(si, library_name, f"Airing Next {mmddyyyy_custom}", weight, "Backdrop Image TMDB Discover", f", date: {mmddyyyy}, status: 0", get_align_offset_overrides(airing_next_settings))
+                        status_string += f"""    filters:
+      last_episode_aired.after: {date_15_days_prior}
+"""
+
                     airing_next_section = f"""
 # AIRING NEXT BANNER/TEXT DAY {i}
   {library_name} Airing Next {mmddyyyy_custom}:
-    variables: {{text: {get_with_defaults(airing_next_settings, 'text', 'next_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_next_settings, 'back_color', 'airing_back_color')}", date: {mmddyyyy}, status: 0}}
+    variables: {{text: {get_with_defaults(airing_next_settings, 'text', 'next_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(airing_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(airing_next_settings, 'back_color', 'airing_back_color')}"{get_backdrop_overrides(airing_next_settings)}{get_text_align_offset_overrides(airing_next_settings)}, date: {mmddyyyy}, status: 0}}
     template: {{name: {library_name} Status TMDB Discover}}
     filters:
       last_episode_aired.after: {date_15_days_prior}
@@ -530,10 +761,19 @@ templates:
             if get_with_defaults(ended_series_settings, "use", "use"):
                 logger.info(f"{indentlog2}'Ended Series' set to true. Creating 'Ended Series' overlay.")
 
+                si = ended_series_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "Ended Series", 9, "Backdrop Image Plex All", align_offset_vars=get_align_offset_overrides(ended_series_settings))
+                    status_string += f"""    plex_all: true
+    filters:
+      tmdb_status:
+        - ended
+"""
+
                 ended_series_section = f"""
 # ENDED SERIES BANNER/TEXT
   {library_name} Ended Series:
-    variables: {{text: {get_with_defaults(ended_series_settings, 'text', 'ended_text')}, weight: 9, font_color: "{get_with_defaults(ended_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(ended_series_settings, 'back_color', 'ended_back_color')}"}}
+    variables: {{text: {get_with_defaults(ended_series_settings, 'text', 'ended_text')}, weight: 9, font_color: "{get_with_defaults(ended_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(ended_series_settings, 'back_color', 'ended_back_color')}"{get_backdrop_overrides(ended_series_settings)}{get_text_align_offset_overrides(ended_series_settings)}}}
     template: {{name: {library_name} Status Plex All}}
     plex_all: true
     filters:
@@ -552,11 +792,20 @@ templates:
 
             if get_with_defaults(canceled_series_settings, "use", "use"):
                 logger.info(f"{indentlog2}'Canceled Series' set to true. Creating 'Canceled Series' overlay.")
-                
+
+                si = canceled_series_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "Canceled Series", 10, "Backdrop Image Plex All", align_offset_vars=get_align_offset_overrides(canceled_series_settings))
+                    status_string += f"""    plex_all: true
+    filters:
+      tmdb_status:
+        - canceled
+"""
+
                 canceled_series_section = f"""
 # CANCELED SERIES BANNER/TEXT
   {library_name} Canceled Series:
-    variables: {{text: {get_with_defaults(canceled_series_settings, 'text', 'canceled_text')}, weight: 10, font_color: "{get_with_defaults(canceled_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(canceled_series_settings, 'back_color', 'canceled_back_color')}"}}
+    variables: {{text: {get_with_defaults(canceled_series_settings, 'text', 'canceled_text')}, weight: 10, font_color: "{get_with_defaults(canceled_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(canceled_series_settings, 'back_color', 'canceled_back_color')}"{get_backdrop_overrides(canceled_series_settings)}{get_text_align_offset_overrides(canceled_series_settings)}}}
     template: {{name: {library_name} Status Plex All}}
     plex_all: true
     filters:
@@ -575,11 +824,22 @@ templates:
 
             if get_with_defaults(returning_series_settings, "use", "use"):
                 logger.info(f"{indentlog2}'Returning Series' set to true. Creating 'Returning' overlay.")
-                
+
+                si = returning_series_settings.get('backdrop_image')
+                if si:
+                    status_string += get_backdrop_image(si, library_name, "Returning Series", 12, "Backdrop Image Plex All", align_offset_vars=get_align_offset_overrides(returning_series_settings))
+                    status_string += f"""    plex_all: true
+    filters:
+      tmdb_status:
+        - returning
+        - planned
+        - production
+"""
+
                 returning_series_section = f"""
 # RETURNING SERIES BANNER/TEXT
   {library_name} Returning Series:
-    variables: {{text: {get_with_defaults(returning_series_settings, 'text', 'returning_text')}, weight: 12, font_color: "{get_with_defaults(returning_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(returning_series_settings, 'back_color', 'returning_back_color')}"}}
+    variables: {{text: {get_with_defaults(returning_series_settings, 'text', 'returning_text')}, weight: 12, font_color: "{get_with_defaults(returning_series_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(returning_series_settings, 'back_color', 'returning_back_color')}"{get_backdrop_overrides(returning_series_settings)}{get_text_align_offset_overrides(returning_series_settings)}}}
     template: {{name: {library_name} Status Plex All}}
     plex_all: true
     filters:
@@ -612,11 +872,18 @@ templates:
                     mmddyyyy_custom = next_day_date.strftime(date_format_with_year)
 
                     weight = 42 - i + 1
-                    
+
+                    si = returns_next_settings.get('backdrop_image')
+                    if si:
+                        status_string += get_backdrop_image(si, library_name, f"Returns Next {mmddyyyy_custom}", weight, "Backdrop Image TMDB Discover", f", date: {mmddyyyy}, status: 0", get_align_offset_overrides(returns_next_settings))
+                        status_string += f"""    filters:
+      last_episode_aired.before: {date_14_days_prior}
+"""
+
                     returns_next_section = f"""
 # RETURNS NEXT BANNER/TEXT DAY {i}
   {library_name} Returns Next {mmddyyyy_custom}:
-    variables: {{text: {get_with_defaults(returns_next_settings, 'text', 'returns_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(returns_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(returns_next_settings, 'back_color', 'returning_back_color')}", date: {mmddyyyy}, status: 0}}
+    variables: {{text: {get_with_defaults(returns_next_settings, 'text', 'returns_text')} {mmdd_custom}, weight: {weight}, font_color: "{get_with_defaults(returns_next_settings, 'font_color', 'font_color')}", back_color: "{get_with_defaults(returns_next_settings, 'back_color', 'returning_back_color')}"{get_backdrop_overrides(returns_next_settings)}{get_text_align_offset_overrides(returns_next_settings)}, date: {mmddyyyy}, status: 0}}
     template: {{name: {library_name} Status TMDB Discover}}
     filters:
       last_episode_aired.before: {date_14_days_prior}
@@ -653,37 +920,62 @@ def create_new_movie_yaml(config_directory):
         new_release_settings = settings.get('movie_new_release', {})
 
         use_backdrop = get_with_defaults(new_release_settings, 'use_backdrop', 'use_backdrop')
-        
+
         if get_with_defaults(new_release_settings, "use", "new_movie_use"):
             logger.info(f"{indentlog}'movie_new_release' 'use:' set to true. Creating 'movie_new_release' overlay.")
 
-            new_movie_string = f"""# New Release Overlay
-overlays:
-  Movie New Release:
+            si = new_release_settings.get('backdrop_image')
+
+            new_movie_string = "# New Release Overlay\noverlays:\n"
+
+            if si:
+                new_movie_string += f"""  Movie New Release Image:
     sync_mode: sync
     builder_level: movie
     overlay:
-      name: text({get_with_defaults(new_release_settings, 'text', 'new_movie_text')})
+      group: status_bg
+      weight: 100
+      name: status-image
+      file: {si}
+      horizontal_align: {new_release_settings.get('bd_horizontal_align', get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align'))}
+      vertical_align: {new_release_settings.get('bd_vertical_align', get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align'))}
+      horizontal_offset: {new_release_settings.get('bd_horizontal_offset', get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset'))}
+      vertical_offset: {new_release_settings.get('bd_vertical_offset', get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset'))}
+    ignore_blank_results: {get_with_defaults(overlay_settings, 'ignore_blank_results', 'ignore_blank_results').lower()}
+    plex_search:
+      all:
+        release: {get_with_defaults(new_release_settings, 'days_to_consider_new', 'days_new')}
+"""
+
+            new_movie_string += f"""  Movie New Release:
+    sync_mode: sync
+    builder_level: movie
+    overlay:
+"""
+            if si:
+                new_movie_string += f"{indent3}group: status\n"
+                new_movie_string += f"{indent3}weight: 100\n"
+            new_movie_string += f"""{indent3}name: text({get_with_defaults(new_release_settings, 'text', 'new_movie_text')})
       font: "{get_with_defaults(overlay_settings, 'font', 'font', config_directory)}"
       font_size: {get_with_defaults(overlay_settings, 'font_size', 'font_size')}
       font_color: "{get_with_defaults(new_release_settings, 'font_color', 'font_color')}"
-      horizontal_align: {get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align')}
-      vertical_align: {get_with_defaults(overlay_settings, 'vertical_align', 'veritcal_align')}
-      horizontal_offset: {get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset')}
-      vertical_offset: {get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset')}
+      horizontal_align: {new_release_settings.get('text_horizontal_align', get_with_defaults(overlay_settings, 'horizontal_align', 'horizontal_align'))}
+      vertical_align: {new_release_settings.get('text_vertical_align', get_with_defaults(overlay_settings, 'vertical_align', 'vertical_align'))}
+      horizontal_offset: {new_release_settings.get('text_horizontal_offset', get_with_defaults(overlay_settings, 'horizontal_offset', 'horizontal_offset'))}
+      vertical_offset: {new_release_settings.get('text_vertical_offset', get_with_defaults(overlay_settings, 'vertical_offset', 'vertical_offset'))}
 """
             if use_backdrop:
                 logger.info(f"{indentlog2}'use_backdrop' set to 'true'")
                 logger.info(f"{indentlog3}Adding backdrop settings to yaml")
                 new_movie_string += f"{indent3}back_color: \"{get_with_defaults(new_release_settings, 'back_color', 'back_color')}\"\n"
-                new_movie_string += f"{indent3}back_width: {get_with_defaults(overlay_settings, 'back_width', 'back_width')}\n"
-                new_movie_string += f"{indent3}back_height: {get_with_defaults(overlay_settings, 'back_height', 'back_height')}\n"
-                new_movie_string += f"{indent3}back_radius: {get_with_defaults(overlay_settings, 'back_radius', 'back_radius')}\n"
+                new_movie_string += f"{indent3}back_width: {new_release_settings.get('back_width', get_with_defaults(overlay_settings, 'back_width', 'back_width'))}\n"
+                new_movie_string += f"{indent3}back_height: {new_release_settings.get('back_height', get_with_defaults(overlay_settings, 'back_height', 'back_height'))}\n"
+                new_movie_string += f"{indent3}back_radius: {new_release_settings.get('back_radius', get_with_defaults(overlay_settings, 'back_radius', 'back_radius'))}\n"
 
             else:
                 logger.info(f"{indentlog2}'use_backdrop' set to 'false'")
                 logger.info(f"{indentlog3}Removing backdrop settings from 'Movie New Release' yaml.")
-            
+
             new_movie_string += f"""{indent2}ignore_blank_results: {get_with_defaults(overlay_settings, 'ignore_blank_results', 'ignore_blank_results').lower()}
     plex_search:
       all:
@@ -1064,7 +1356,8 @@ templates:
     summary: "Movies/shows currently in the <<collection_name>>."
     minimum_items: {get_with_defaults(top_collection_settings, 'minimum_items', 'top_minimum_items')}
     delete_below_minimum: {get_with_defaults(top_collection_settings, 'delete_below_minimum', 'top_delete_below_minimum').lower()}
-
+    ignore_blank_results: true
+    
 collections:
   Netflix Top 10:
     template: {{name: Top 10, poster: https://raw.githubusercontent.com/kometa-team/Default-Images/master/chart/color/netflix_top.jpg}}

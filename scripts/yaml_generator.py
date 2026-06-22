@@ -1356,7 +1356,8 @@ templates:
     summary: "Movies/shows currently in the <<collection_name>>."
     minimum_items: {get_with_defaults(top_collection_settings, 'minimum_items', 'top_minimum_items')}
     delete_below_minimum: {get_with_defaults(top_collection_settings, 'delete_below_minimum', 'top_delete_below_minimum').lower()}
-
+    ignore_blank_results: true
+    
 collections:
   Netflix Top 10:
     template: {{name: Top 10, poster: https://raw.githubusercontent.com/kometa-team/Default-Images/master/chart/color/netflix_top.jpg}}
